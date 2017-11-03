@@ -1,0 +1,14 @@
+//============================================================================
+// Name        : BA.cpp
+// Author      : Suguman Bansal
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Class for Buchi automata 
+//============================================================================
+
+#inlcude <iostream>
+#include "BA.h"
+
+using namespace std;
+
+
