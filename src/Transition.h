@@ -5,7 +5,12 @@
  * Author: Suguman Bansal
  */
 
-#include <string>
+//#include <string>
+
+#ifndef TRANSITION_H
+#define TRANSITION_H
+
+#include "common.h"
 
 using namespace std;
 
@@ -33,3 +38,6 @@ private:
   string alpha;
   
 };
+
+
+#endif

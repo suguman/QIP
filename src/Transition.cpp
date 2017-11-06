@@ -6,8 +6,10 @@
 // Description : Class for (unweighted) transitions
 //============================================================================
 
-#include <iostream>
-#include <string>
+//#include <iostream>
+//#include <string>
+
+#include "common.h"
 #include "Transition.h"
 
 using namespace std;

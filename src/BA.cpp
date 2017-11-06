@@ -6,23 +6,26 @@
 // Description : Class for Buchi automata 
 //============================================================================
 
-#include <iostream>
-#include <string>
-#include <vector>
+//#include <iostream>
+//#include <string>
+//#include <vector>
 
+#include "common.h"
 #include "BA.h"
+//#include "Transition.h"
+
 
 using namespace std;
 
 BA::BA(){
   this->numState = 0;
-  //alphabet = {};
+  this->alphabet = {};
   this->initial = {};
   this->final = {};
-  //transFunc = {};
+  this->transFunc = {};
 }
 
-BA::BA(int num,  int numInit, int numFinal, int *pInit, int *pFinal){
+BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFinal, string* pAlpha, vector<Transition>* transList){
   this->numState = num;
   //alphabet = &alpha;
   /*
@@ -40,6 +43,30 @@ BA::BA(int num,  int numInit, int numFinal, int *pInit, int *pFinal){
   int* endFinal = pFinal + numFinal;
   this->final = vector<int> (beginFinal, endFinal);
 
+  //alphabet = {};
+  string* beginAlpha = pAlpha;
+  string* endAlpha = pAlpha + numAlpha;
+  /*
+  for (int i=0; i<numAlpha; i++){
+    cout << pAlpha[i] << endl;
+  }
+  */
+  this->alphabet = vector<string> (beginAlpha, endAlpha);
+
+  for (int i=0; i<num; i++){
+    this->transFunc[i] = vector<Transition> {};
+  }
+  cout << num << endl;
+  int len = (*transList).size();
+  int src = 0;
+  //cout << (*transList)[1].getSrc() << endl;
+  //cout << (*transList).size() << endl;
+  //cout << src << endl;
+  for (int j=0; j<len; j++){
+    src = (*transList)[j].getSrc();
+    (this->transFunc)[src].push_back((*transList)[j]);
+  }
+ 
 }
 
 BA::~BA(){
@@ -56,6 +83,10 @@ vector<int> BA::getInitial(){
 
 vector<int> BA::getFinal(){
     return final;
+}
+
+vector<string> BA::getAlpha(){
+  return alphabet;
 }
 
 void BA::printFinal(){
@@ -76,4 +107,16 @@ void BA:: printInitial(){
     cout << initialList[i] << ", ";
   }
   cout << endl;
+}
+
+void BA::printAlpha(){
+  
+  vector<string> alphaList = this->getAlpha();
+  int len = alphaList.size();
+  cout << "Alphabet is : ";
+  for (int i=0; i<len; i++){
+    cout << alphaList[i] << ", ";
+  }
+  cout << endl;
+  
 }
