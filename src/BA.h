@@ -25,21 +25,24 @@ class BA{
   virtual ~BA();
 
   int getStateNum();
-  vector<int> getInitial();
-  vector<int> getFinal();
-  vector<string> getAlpha();
+  vector<int>* getInitial();
+  vector<int>* getFinal();
+  vector<string>* getAlpha();
+  unordered_map<int, vector< Transition> >* getTrans();
   
   void printInitial();
   void printFinal();
   void printAlpha();
+  void printTrans();
+  void printAll();
   
  private:
   int numState;
   vector<string> alphabet;
   vector<int> initial;
   vector<int> final;
-  unordered_map<int, vector<Transition>> transFunc;
-  // transFunc needs to change to Hash map - unordered map
+  unordered_map<int, vector<Transition> > transFunc;
+  
   
 };
 

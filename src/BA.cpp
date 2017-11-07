@@ -43,7 +43,6 @@ BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFin
   int* endFinal = pFinal + numFinal;
   this->final = vector<int> (beginFinal, endFinal);
 
-  //alphabet = {};
   string* beginAlpha = pAlpha;
   string* endAlpha = pAlpha + numAlpha;
   /*
@@ -74,23 +73,27 @@ BA::~BA(){
 }
 
 int BA::getStateNum(){
-  return numState;
+  return this->numState;
 }
 
-vector<int> BA::getInitial(){
-    return initial;
+vector<int>* BA::getInitial(){
+  return &(this->initial);
 }
 
-vector<int> BA::getFinal(){
-    return final;
+vector<int>* BA::getFinal(){
+  return &(this->final);
 }
 
-vector<string> BA::getAlpha(){
-  return alphabet;
+vector<string>* BA::getAlpha(){
+  return &(this->alphabet);
 }
 
+unordered_map<int, vector<Transition>>* BA::getTrans(){
+  //cout << &(this->transFunc) << endl;
+  return &(this->transFunc);
+}
 void BA::printFinal(){
-  vector<int> finalList = this->getFinal();
+  vector<int> finalList = *(this->getFinal());
   int len = finalList.size();
   cout << "Final states are : ";
   for (int i = 0; i < len; i++){
@@ -100,7 +103,7 @@ void BA::printFinal(){
 }
 
 void BA:: printInitial(){
-  vector<int> initialList = this->getInitial();
+  vector<int> initialList = *(this->getInitial());
   int len = initialList.size();
   cout << "Initial states are : ";
   for (int i = 0; i < len; i++){
@@ -111,7 +114,7 @@ void BA:: printInitial(){
 
 void BA::printAlpha(){
   
-  vector<string> alphaList = this->getAlpha();
+  vector<string> alphaList = *(this->getAlpha());
   int len = alphaList.size();
   cout << "Alphabet is : ";
   for (int i=0; i<len; i++){
@@ -119,4 +122,24 @@ void BA::printAlpha(){
   }
   cout << endl;
   
+}
+
+void BA::printTrans(){
+  unordered_map<int, vector<Transition> > tFunction = *(this->getTrans());
+  int num = this->getStateNum();
+  int numTrans = 0;
+  for (int i=0; i< num; i++){
+    numTrans = tFunction[i].size();
+    cout << "Number of transitions from state " << i << " are " << numTrans << endl;
+    for (int j=0; j < numTrans; j++){
+      tFunction[i][j].toString();
+    }
+  }
+}
+
+void BA::printAll(){
+  this->printInitial();
+  this->printAlpha();
+  this->printTrans();
+  this->printFinal();
 }
