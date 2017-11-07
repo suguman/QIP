@@ -21,7 +21,7 @@ public:
   //TODO ALL
   wTransition();
   //wTransition(int s, int d, string a, int w): Transition(int s, int d, string a);
-  //wTransition(int s, int d, string a, int w);
+  wTransition(int s, int d, string a, int w);
   virtual ~wTransition();
   
   //int getSrc();
