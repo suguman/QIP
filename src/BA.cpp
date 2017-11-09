@@ -25,16 +25,11 @@ BA::BA(){
   this->transFunc = {};
 }
 
-BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFinal, string* pAlpha, vector<Transition>* transList){
+//Modified for trans
+//BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFinal, string* pAlpha, vector<Transition>* transList){
+BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFinal, string* pAlpha, vector<Transition*>* transList){
   this->numState = num;
-  //alphabet = &alpha;
-  /*
-  int i;
-  for(i=0; i<num; i++){
-    cout << *(pInit+i) << "\n";
-    initial.push_back(*(pInit+i));
-  }
-  */
+  
   int* beginInit = pInit;
   int* endInit = pInit + numInit;
   this->initial = vector<int> (beginInit, endInit);
@@ -45,13 +40,9 @@ BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFin
 
   string* beginAlpha = pAlpha;
   string* endAlpha = pAlpha + numAlpha;
-  /*
-  for (int i=0; i<numAlpha; i++){
-    cout << pAlpha[i] << endl;
-  }
-  */
   this->alphabet = vector<string> (beginAlpha, endAlpha);
 
+  /* Commenting this bit for testing
   for (int i=0; i<num; i++){
     this->transFunc[i] = vector<Transition> {};
   }
@@ -65,7 +56,20 @@ BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFin
     src = (*transList)[j].getSrc();
     (this->transFunc)[src].push_back((*transList)[j]);
   }
- 
+  */
+
+  //Beginning of the new code
+
+  for (int i=0; i < num; i++){
+    this->transFunc[i] = vector<Transition*> {};
+  }
+  int len = (*transList).size();
+  int src = 0;
+  for (int j=0; j < len; j++){
+    src = (*(*transList)[j]).getSrc();
+    (this->transFunc)[src].push_back((*transList)[j]);
+  }
+  //End of the new code
 }
 
 BA::~BA(){
@@ -88,7 +92,9 @@ vector<string>* BA::getAlpha(){
   return &(this->alphabet);
 }
 
-unordered_map<int, vector<Transition>>* BA::getTrans(){
+//Commenting out for new code
+//unordered_map<int, vector<Transition>>* BA::getTrans(){
+unordered_map<int, vector<Transition*> >* BA::getTrans(){
   //cout << &(this->transFunc) << endl;
   return &(this->transFunc);
 }
@@ -125,14 +131,18 @@ void BA::printAlpha(){
 }
 
 void BA::printTrans(){
-  unordered_map<int, vector<Transition> > tFunction = *(this->getTrans());
+
+  //Commenting out for new code
+  //unordered_map<int, vector<Transition> > tFunction = *(this->getTrans());
+  unordered_map<int, vector<Transition*> > tFunction = *(this->getTrans());
   int num = this->getStateNum();
   int numTrans = 0;
   for (int i=0; i< num; i++){
     numTrans = tFunction[i].size();
     cout << "Number of transitions from state " << i << " are " << numTrans << endl;
     for (int j=0; j < numTrans; j++){
-      tFunction[i][j].toString();
+      //tFunction[i][j].toString();
+      (*tFunction[i][j]).toString();
     }
   }
 }

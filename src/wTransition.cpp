@@ -24,10 +24,7 @@ wTransition::wTransition():
 
 
 wTransition::wTransition(int s, int d, string a, int w):
-  Transition(int s, int d, string a){
-  //srcState = src;
-  //destState = dest;
-  //alpha = a;
+  Transition(s, d, a){
   this->wt = w;
 }
 
@@ -46,7 +43,7 @@ void wTransition::setWt(int w){
 
 
 void wTransition::toString(){
-  //TODO
+  
   cout << getSrc();
   cout << "-->" ;
   cout << getAlpha() ;

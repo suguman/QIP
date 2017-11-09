@@ -5,59 +5,45 @@
 
 //#include "common.h"
 
+
+
 #include "BA.h"
 #include "Transition.h"
+#include "wBA.h"
 #include "wTransition.h"
 
 int main (){
-  Transition trans;
-  Transition trans2(2,2,"a");
-  Transition trans3(2, 3, "a");
-  //trans.toString();
-  //trans2.toString();
-  wTransition wTrans;
-  wTrans.toString();
-  cout << wTrans.getSrc() << endl;
-  wTrans.setSrc(5);
-  cout << wTrans.getSrc() << endl;
-  wTrans.toString();
-  wTrans.setWt(6);
-  wTrans.toString();
-  cout << wTrans.getWt() << endl;
-  vector< Transition > transList;
-  transList.push_back(trans);
-  transList.push_back(trans2);
-  transList.push_back(trans3);
+ 
 
-  //Transition wtrans2;
-  //wtrans2.setWt(6);
+  Transition* mytrans = new Transition();
+  (*mytrans).toString();
+  mytrans = new Transition(1, 2, "a");
+  (*mytrans).toString();
+  mytrans = new wTransition();
+  (*mytrans).toString();
+  mytrans = new wTransition(2, 4, "a", 5);
+  (*mytrans).toString();
+  //(&mytrans).toString();
   
-  BA aut;
+  vector< Transition > transList;
 
+
+  vector<Transition* > test;
+  test.push_back(mytrans);
+  test[0]->toString();
+
+  Transition* mytrans2 = new wTransition(1, 2, "a", 10);
+  test.push_back(mytrans2);
+  (*test[1]).toString();
+  wTransition* newP = (wTransition*) mytrans2;
+  cout<< newP->getWt() << endl;
+  
   int ar1[] = {8,9,10,11,12};
   int ar2[] = {5,3};
   string ar3[] = {"a", "b", "c", "d"};
   
-  BA aut2(8, 5, 2, 4,  ar1, ar2, ar3, &transList);
-
-  //cout << sizeof(string) << endl;
-  //cout << sizeof(int) << endl;
-  //aut2.printInitial();
-  //aut2.printFinal();
-  //aut2.printAlpha();
-
-  //cout <<  aut2.getTrans() << endl;
-  //unordered_map<int, vector<Transition> > tFunction;
-  //tFunction = *(aut2.getTrans());
-  //aut2.printTrans();
+  wBA aut2(8, 5, 2, 4,  ar1, ar2, ar3, &test);
   //aut2.printAll();
-  //cout << (aut2.getTrans()).size()<< endl;
-  //cout << (aut2.getTrans())[3].size()<< endl;
-  //cout << (aut2.transFunc)[4].size() << endl;
-  //cout << aut2.getTrans()[4].size() << endl;
-  //cout << aut2.getStateNum() << endl;
-  //cout << aut2.getInitial()[0] << endl;
-  //cout << aut2.getInitial()[1] << endl;
-  //cout << aut2.getInitial()[2] << endl;
+ 
 return 0;
 }

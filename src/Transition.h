@@ -30,7 +30,7 @@ public:
   void setDest(int d);
   void setAlpha(string a);
   
-  void toString();
+  virtual void toString();
 
 private:
   int srcState;
