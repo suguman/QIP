@@ -23,7 +23,7 @@ wBA::wBA(int num, int numInit, int numFinal, int numAlpha, int* pInit, int *pFin
 wBA::~wBA(){
   //TODO
 }
-vector<int>* wBA::getWeight(){
+vector<int> wBA::getWeight(){
   unordered_map <int, vector<Transition* > >* transF =  this->getTrans();
   int num = this->getStateNum();
   unordered_set<int> wtSet = {};
@@ -43,13 +43,11 @@ vector<int>* wBA::getWeight(){
   vector<int> wtList = vector<int> (wtSet.begin(), wtSet.end());
   cout << wtSet.size() << endl;
   cout << wtList.size() << endl;
-  return &wtList;
+  return wtList;
   
 }
 
 void wBA::printWeight(){
   //TODO
 }
-
-
 

@@ -9,6 +9,7 @@
 
 #include "BA.h"
 #include "Transition.h"
+#include "rwUtils.h"
 #include "wBA.h"
 #include "wTransition.h"
 
@@ -44,6 +45,18 @@ int main (){
   
   wBA aut2(8, 5, 2, 4,  ar1, ar2, ar3, &test);
   //aut2.printAll();
- 
+  vector<int> myWt = aut2.getWeight();
+  cout << myWt.size() << endl;
+  cout << myWt[0] << endl;
+  cout << myWt[1] << endl;
+
+  wBA aut1;
+  aut1.addInitial(8);
+  aut1.printInitial();
+  aut1.addInitial(9);
+  aut1.printInitial();
+
+  readWBA("textfile.txt");
+  
 return 0;
 }

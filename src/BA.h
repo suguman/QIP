@@ -8,8 +8,6 @@
 #ifndef BA_H
 #define BA_H
 
-//#include <string>
-//#include <vector>
 
 
 #include "common.h"
@@ -37,6 +35,8 @@ class BA{
   void printAlpha();
   void printTrans();
   void printAll();
+
+  void addInitial(int i);
   
  private:
   int numState;

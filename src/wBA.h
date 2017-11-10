@@ -24,10 +24,12 @@ public:
   wBA(int num, int numInit, int numFinal, int numAlpha, int* pInit, int *pFinal, string pAlpha[], vector<Transition*>* transList);
   virtual ~wBA();
   
-  vector<int>* getWeight();
+  vector<int> getWeight();
   //void getWeight();
 
   void printWeight();
+
+  
 };
 
 

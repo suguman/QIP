@@ -153,3 +153,10 @@ void BA::printAll(){
   this->printTrans();
   this->printFinal();
 }
+
+void BA::addInitial(int i){
+  vector<int>* ptrInit = this->getInitial();
+  cout << ptrInit->size() << endl;
+  ptrInit->push_back(i);
+  cout << ptrInit->size() << endl;
+}
