@@ -15,6 +15,6 @@
 
 using namespace std;
 
-wBA readWBA(string filename);
+wBA* readWBA(string filename);
 
 #endif

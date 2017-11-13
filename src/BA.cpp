@@ -42,25 +42,6 @@ BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFin
   string* endAlpha = pAlpha + numAlpha;
   this->alphabet = vector<string> (beginAlpha, endAlpha);
 
-  /* Commenting this bit for testing
-  for (int i=0; i<num; i++){
-    this->transFunc[i] = vector<Transition> {};
-  }
-  cout << num << endl;
-  int len = (*transList).size();
-  int src = 0;
-  //cout << (*transList)[1].getSrc() << endl;
-  //cout << (*transList).size() << endl;
-  //cout << src << endl;
-  for (int j=0; j<len; j++){
-    src = (*transList)[j].getSrc();
-    (this->transFunc)[src].push_back((*transList)[j]);
-  }
-  */
-
-  //Beginning of the new code
-
-  //cout << "Transition List address is " << transList << endl;
   for (int i=0; i < num; i++){
     this->transFunc[i] = vector<Transition*> {};
   }
@@ -68,12 +49,12 @@ BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFin
   int src = 0;
   for (int j=0; j < len; j++){
     src = (*(*transList)[j]).getSrc();
-    (*transList)[j]->toString();
+    //(*transList)[j]->toString();
     (this->transFunc)[src].push_back((*transList)[j]);
-    (this->transFunc)[src][0]->toString();
+    
   }
   //End of the new code
-  cout << "Transition function is here : "<< &transFunc << endl;
+  
 }
 
 BA::~BA(){
@@ -96,17 +77,14 @@ vector<string>* BA::getAlpha(){
   return &(this->alphabet);
 }
 
-//Commenting out for new code
-//unordered_map<int, vector<Transition>>* BA::getTrans(){
-unordered_map<int, vector<Transition*> >* BA::getTrans(){
-  //cout << &(this->transFunc) << endl;
-  cout << "Checking " << endl;
-  (this->transFunc)[1][0]->toString();
+unordered_map<int, vector<Transition*> >* BA::getTrans(){ 
   return &(this->transFunc);
 }
+
 void BA::printFinal(){
   vector<int> finalList = *(this->getFinal());
   int len = finalList.size();
+  //cout <<  len << endl;
   cout << "Final states are : ";
   for (int i = 0; i < len; i++){
     cout << finalList[i] << ", ";
@@ -138,20 +116,18 @@ void BA::printAlpha(){
 
 void BA::printTrans(){
 
-  //Commenting out for new code
-  //unordered_map<int, vector<Transition> > tFunction = *(this->getTrans());
+  
   unordered_map<int, vector<Transition*> > tFunction = *(this->getTrans());
-  cout << &tFunction << endl;
+  //cout << &tFunction << endl;
   int num = this->getStateNum();
   int numTrans = 0;
   for (int i=0; i< num; i++){
     numTrans = tFunction[i].size();
     cout << "Number of transitions from state " << i << " are " << numTrans << endl;
     for (int j=0; j < numTrans; j++){
-      //tFunction[i][j].toString();
-      cout << j << endl;
-      cout << (tFunction[i][j]) << endl;
-      //(*tFunction[i][j]).toString();
+    
+      //cout << (tFunction[i][j]) << endl;
+      (*tFunction[i][j]).toString();
     }
   }
 }

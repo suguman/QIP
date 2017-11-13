@@ -56,9 +56,10 @@ int main (){
   aut1.addInitial(9);
   //aut1.printInitial();
 
-  wBA readAut = readWBA("textfile.txt");
-  cout << readAut.getTrans() << endl; 
-  readAut.printTrans();
+  wBA* readAut = readWBA("textfile.txt");
+  //cout << readAut.getTrans() << endl; 
+  //readAut.printTrans();
+  readAut->printAll();
   
 return 0;
 }
