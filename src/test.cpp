@@ -66,6 +66,8 @@ int main (){
 
   BA* autnew = readAut->augmentWtLabel();
   autnew->printAll();
+
+  BA* autprod = sameAlphaProd(aut, autnew);
   
 return 0;
 }

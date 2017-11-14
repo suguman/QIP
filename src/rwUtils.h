@@ -17,4 +17,6 @@ using namespace std;
 
 wBA* readWBA(string filename);
 
+BA* sameAlphaProd(BA* aut1, BA* aut2);
+
 #endif

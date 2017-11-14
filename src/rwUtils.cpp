@@ -162,3 +162,54 @@ wBA* readWBA(string filename){
   wBA* inputWBA = new wBA(numState, numInit, numState, k, initList, finalList, alphaList, &ptrWTransList); 
   return inputWBA;
 }
+
+
+BA* sameAlphaProd(BA* aut1, BA* aut2){
+
+  int aut1State = aut1->getStateNum();
+  int aut2State = aut2->getStateNum();
+  int numprodstate = aut1->getStateNum() * aut2->getStateNum();
+  string ss = "";
+  string sep = "_";
+  unordered_map<string, int> stateMap;
+  for (int i=0; i < aut1State; i++){
+    for (int j=0; j< aut2State; j++){
+      ss = to_string(i);
+      ss += sep;
+      ss += to_string(j);
+      stateMap[ss] = -1;
+      ss = "";
+    }
+  }
+
+  int numState = 0; 
+
+  vector<int>::iterator it1;
+  vector<int>::iterator it2;
+  vector<int>* init1 = aut1->getInitial();
+  vector<int>* init2 = aut2->getInitial();
+  
+  unordered_map<string, vector<Transition*>>* prodTrans;
+  for(it1 = init1->begin(); it1!= init1->end(); ++it1){
+    cout << (*init1)[*it1] << endl;
+    for(it2 = init2->begin(); it2!= init2->end(); ++it2){
+      cout << (*init1)[*it1] << " " << (*init2)[*it2] << endl;
+      ss = to_string((*init1)[*it1]);
+      ss += sep;
+      ss += to_string((*init2)[*it2]);
+      stateMap[ss] = numState;
+      cout << ss << " " << stateMap[ss]<< endl;
+      ss = "";
+      //cout << ss << endl;
+      numState += 1;
+    }
+  }
+  
+  unordered_map<int, vector<Transition*>>*  aut1Trans = aut1->getTrans();
+  unordered_map<int, vector<Transition*>>*  aut2Trans = aut2->getTrans();
+  int aut1NumTrans = aut1Trans->size();
+  int aut2NumTrans = aut2Trans->size();
+  
+  BA* trivial = new BA();
+  return trivial;
+}
