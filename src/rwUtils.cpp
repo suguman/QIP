@@ -183,13 +183,14 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
   }
 
   int numState = 0; 
-
+  int numInit = 0;
+  
   vector<int>::iterator it1;
   vector<int>::iterator it2;
   vector<int>* init1 = aut1->getInitial();
   vector<int>* init2 = aut2->getInitial();
   
-  unordered_map<string, vector<Transition*>>* prodTrans;
+  unordered_map<string, vector<Transition*>>* prodTrans = new unordered_map<string, vector<Transition*>> {};
   for(it1 = init1->begin(); it1!= init1->end(); ++it1){
     cout << (*init1)[*it1] << endl;
     for(it2 = init2->begin(); it2!= init2->end(); ++it2){
@@ -199,9 +200,11 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
       ss += to_string((*init2)[*it2]);
       stateMap[ss] = numState;
       cout << ss << " " << stateMap[ss]<< endl;
+      (*prodTrans)[ss] =  vector<Transition*> {};
       ss = "";
       //cout << ss << endl;
       numState += 1;
+      numInit += 1;
     }
   }
   
