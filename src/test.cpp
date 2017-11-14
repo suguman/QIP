@@ -60,6 +60,12 @@ int main (){
   //cout << readAut.getTrans() << endl; 
   //readAut.printTrans();
   readAut->printAll();
+
+  BA* aut = readAut->augmentWt();
+  aut->printAll();
+
+  BA* autnew = readAut->augmentWtLabel();
+  autnew->printAll();
   
 return 0;
 }

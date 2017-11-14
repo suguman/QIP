@@ -19,8 +19,11 @@ class BA{
 
  public:
   BA();
-  //BA(int num, int numInit, int numFinal, int numAlpha, int* pInit, int *pFinal, string pAlpha[], vector<Transition>* transList);
+ 
   BA(int num, int numInit, int numFinal, int numAlpha, int* pInit, int *pFinal, string pAlpha[], vector<Transition*>* transList);
+  
+  BA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, unordered_map<int, vector<Transition*> >* transMap);
+  
   virtual ~BA();
 
   int getStateNum();

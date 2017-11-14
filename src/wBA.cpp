@@ -20,6 +20,9 @@ wBA::wBA():
 wBA::wBA(int num, int numInit, int numFinal, int numAlpha, int* pInit, int *pFinal, string pAlpha[], vector<Transition*>* transList):
   BA(num, numInit, numFinal,  numAlpha,  pInit, pFinal, pAlpha, transList){}
 
+wBA::wBA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, unordered_map<int, vector<Transition*> >* transMap):
+  BA(num, initList, finalList, alphaList, transMap){}
+
 wBA::~wBA(){
   //TODO
 }
@@ -51,3 +54,94 @@ void wBA::printWeight(){
   //TODO
 }
 
+BA* wBA::augmentWt(){
+
+  string sep = ";;";
+  
+  int numState = this->getStateNum();
+  vector<int>* initList = this->getInitial();
+  vector<string>* alphaList = this->getAlpha();
+  vector<int>* finalList = this->getFinal();
+  unordered_map<int, vector< Transition*>> * wtransMap = this->getTrans();
+
+  Transition* trans;
+  string str;
+
+  unordered_map<int , vector<Transition*>>* transMap = new unordered_map<int, vector<Transition*>> {};
+  
+  for (int i=0; i< numState; i++){
+    (*transMap)[i] = vector<Transition*> {};
+  }
+
+  int numTrans = 0;
+  for (int j=0; j< numState; j++){
+    numTrans = (*wtransMap)[j].size();
+   
+    for (int k=0; k < numTrans; k++){
+      wTransition* ptrTrans = (wTransition*) (*wtransMap)[j][k];
+      
+      str = ptrTrans->getAlpha();
+      str += sep;
+      str += to_string(ptrTrans->getWt());
+
+      trans = new Transition(j, ptrTrans->getDest(), str);
+
+      (*transMap)[j].push_back(trans);
+ 
+      }
+  }
+
+  BA* augmentAut = new BA(numState, initList, finalList, alphaList, transMap);
+ 
+  return augmentAut;
+}
+
+
+
+BA* wBA::augmentWtLabel(){
+
+  string sep = ";;";
+  
+  int numState = this->getStateNum();
+  vector<int>* initList = this->getInitial();
+  vector<string>* alphaList = this->getAlpha();
+  vector<int>* finalList = this->getFinal();
+  unordered_map<int, vector< Transition*>> * wtransMap = this->getTrans();
+
+  Transition* trans;
+  string str;
+ 
+  int totalTrans = 0;
+  
+  unordered_map<int , vector<Transition*>>* transMap = new unordered_map<int, vector<Transition*>> {};
+  
+  for (int i=0; i< numState; i++){
+    (*transMap)[i] = vector<Transition*> {};
+  }
+
+  int numTrans = 0;
+  for (int j=0; j< numState; j++){
+    numTrans = (*wtransMap)[j].size();
+   
+    for (int k=0; k < numTrans; k++){
+      wTransition* ptrTrans = (wTransition*) (*wtransMap)[j][k];
+      
+      str = ptrTrans->getAlpha();
+      str += sep;
+      str += to_string(ptrTrans->getWt());
+      str += sep;
+      str += to_string(totalTrans);
+      
+      totalTrans += 1;
+
+      trans = new Transition(j, ptrTrans->getDest(), str);
+
+      (*transMap)[j].push_back(trans);
+      
+      }
+  }
+
+  BA* augmentAut = new BA(numState, initList, finalList, alphaList, transMap);
+ 
+  return augmentAut;
+}

@@ -57,6 +57,14 @@ BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFin
   
 }
 
+BA::BA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, unordered_map<int, vector<Transition*> >* transMap){
+  this->numState = num;
+  this->alphabet = *alphaList;
+  this->initial = *initList;
+  this->final = *finalList;
+  this->transFunc = *transMap;
+}
+
 BA::~BA(){
   //TODO
 }
