@@ -70,7 +70,8 @@ int main (){
   BA* autprod = sameAlphaProd(aut, autnew);
   autprod->printAll();
 
-  
+  BA* autba = readBA("testfile2.txt");
+  autba->printAll();
        
 return 0;
 }

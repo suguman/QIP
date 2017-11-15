@@ -238,9 +238,9 @@ BA* readBA(string filename){
       index = x.find(delimiter2);
       srcStr = x.substr(0, index);
   
-      x.erase(0, index+delimiter2Len);
-      index = x.find(delimiter1);
-      destStr = x.substr(0, index);
+      destStr = x.erase(0, index+delimiter2Len);
+      //index = x.find(delimiter1);
+      //destStr = x.substr(0, index);
     
       //wtStr = x.erase(0, index+delimiter1Len);
     
