@@ -68,6 +68,9 @@ int main (){
   autnew->printAll();
 
   BA* autprod = sameAlphaProd(aut, autnew);
+  autprod->printAll();
+
   
+       
 return 0;
 }
