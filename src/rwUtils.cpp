@@ -314,6 +314,7 @@ BA* readBA(string filename){
 
 
 BA* sameAlphaProd(BA* aut1, BA* aut2){
+  //Note :: current implementation of sameAlphaProd can result in duplication of transitions in the output. This is becaue we do not check if the transition is already present in the transition function before inserted it. 
 
   int aut1State = aut1->getStateNum();
   int aut2State = aut2->getStateNum();
@@ -411,11 +412,28 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
 	//cout << alpha1 << " " << alpha2 << endl;
 	if (alpha1.substr(0, alpha1.find(alphasep)) == alpha2.substr(0, alpha2.find(alphasep))){
 
+	  //posA is length of common alphabet in both alphabets since they are the same
+	  
+	  int posA = alpha1.find(alphasep);
 	  //Make the product alpha
+	  int dlen = alphasep.size();
+	  alphaprod = alpha1.substr(0, posA+dlen);
+	  int wt1 = stoi(alpha1.substr(posA+dlen));
+	  alpha2.erase(0, posA+dlen);
+	  int wt2 = stoi(alpha2.substr(0, dlen));
+	  alpha2.erase(0, alpha2.find(alphasep));
+	  alphaprod += to_string(wt1 - wt2);
+	  alphaprod += alpha2;
+	  
+	  /*
+	  //This construction of alphaprod doesn't take the difference of weights. It simply concatenates them
 	  alphaprod = alpha1;
 	  alphaprod += alpha2.substr(alpha2.find(alphasep), alpha2.size());
+	  */
+	  
 	  alphaList->push_back(alphaprod);
-       
+	  
+	  
 	  //Make the product destination
 	  d1 = trans1->getDest();
 	  d2 = trans2->getDest();
@@ -434,7 +452,9 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
 	  //Make prod transition, and add to the relevant place
 	  transprod = new Transition(stateMap[reachState[k]], stateMap[ss], alphaprod);
 	  (*prodTrans)[stateMap[reachState[k]]].push_back(transprod);
-	  //cout << stateMap[reachState[k]] << " " << reachState[k] << " " << (*prodTrans)[stateMap[reachState[k]]].size() << endl;
+	  //TODO
+	  //Include the new transition only if the same transition hasn't been inserted before. Is it even worth doing?
+	  
 	}
 	alphaprod = "";
 	ss = "";

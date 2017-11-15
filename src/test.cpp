@@ -71,7 +71,7 @@ int main (){
   autprod->printAll();
 
   BA* autba = readBA("testfile2.txt");
-  autba->printAll();
+  //autba->printAll();
        
 return 0;
 }
