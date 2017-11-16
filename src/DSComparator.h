@@ -19,7 +19,7 @@ class DS: public BA{
 
  public:
 
-  DS(int df, int* difList, int alphanum);
+  DS(int df, int* difList, int len);
 
   virtual ~DS();
   

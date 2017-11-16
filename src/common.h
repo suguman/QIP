@@ -1,8 +1,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <math.h>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>

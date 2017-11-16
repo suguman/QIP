@@ -1,3 +1,3 @@
-all: Transition.cpp test.cpp BA.cpp wTransition.cpp wBA.cpp rwUtils.cpp
+all: Transition.cpp test.cpp BA.cpp wTransition.cpp wBA.cpp rwUtils.cpp DSComparator.cpp
 
-	g++ -std=c++11 Transition.cpp test.cpp BA.cpp wTransition.cpp wBA.cpp rwUtils.cpp -w
+	g++ -std=c++11 Transition.cpp test.cpp BA.cpp wTransition.cpp wBA.cpp rwUtils.cpp DSComparator.cpp -w

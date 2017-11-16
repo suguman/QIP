@@ -8,6 +8,7 @@
 
 
 #include "BA.h"
+#include "DSComparator.h"
 #include "Transition.h"
 #include "rwUtils.h"
 #include "wBA.h"
@@ -72,6 +73,11 @@ int main (){
 
   BA* autba = readBA("testfile2.txt");
   //autba->printAll();
-       
+
+  int ar[] = {3, 7, 10};
+  DS dstest = DS(4, ar, 3);
+  //dstest.printAll();
+
+ 
 return 0;
 }
