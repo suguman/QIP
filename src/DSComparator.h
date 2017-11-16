@@ -15,19 +15,11 @@
 
 using namespace std;
 
-class DS: public BA{
 
- public:
 
-  DS(int df, int* difList, int len);
+BA* makeDS(int df, int* difList, int len);
 
-  virtual ~DS();
   
- private:
- 
-  
-  
-};
 
 
 #endif 

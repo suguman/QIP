@@ -75,7 +75,8 @@ int main (){
   //autba->printAll();
 
   int ar[] = {3, 7, 10};
-  DS dstest = DS(4, ar, 3);
+  BA* dstest = makeDS(4, ar, 3);
+  dstest->printAll();
   //dstest.printAll();
 
  
