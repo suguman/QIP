@@ -558,7 +558,7 @@ BA* intersectSelAlpha(BA* aut, BA* comp){
   int d2;
   string alpha1;
   string alpha2;
-  string alphaprod;
+  string alphaproject;
   string alphasep = ";;";
   int alphaseplen = 2;
   
@@ -583,17 +583,22 @@ BA* intersectSelAlpha(BA* aut, BA* comp){
 
 	//trans1->toString();
 	//trans2->toString();
-	
+
+	//Also creating new alphabet for the projection. Removing the weight vector
 	alpha1 = trans1->getAlpha();
-	wtStr  = alpha1.substr(alpha1.find(alphasep)+ alphaseplen);
-	wtStr.erase(wtStr.find(alphasep));
+	//cout << alpha1 << endl;
+	alphaproject = alpha1.substr(0, alpha1.find(alphasep));
+	alpha1.erase(0, alpha1.find(alphasep)+ alphaseplen);
+	wtStr = alpha1.substr(0, alpha1.find(alphasep));
+	alphaproject += alpha1.substr(alpha1.find(alphasep));
+
 	alpha2 = trans2->getAlpha();
-	//cout << alpha1 << " " << alpha2 << " " << wtStr << endl;
+	//cout << alphaproject << " " << wtStr << " " << alpha2 << " " <<  endl;
 		
 	//cout << alpha1 << " " << alpha2 << endl;
 	if (wtStr == alpha2){
 	
-	  alphaList->push_back(alpha1);
+	  alphaList->push_back(alphaproject);
 	   
 	  
 	  //Make the product destination
@@ -613,7 +618,7 @@ BA* intersectSelAlpha(BA* aut, BA* comp){
 
 	  //Make prod transition, and add to the relevant place
 	  //cout << "new transition " << endl;
-	  transprod = new Transition(stateMap[reachState[k]], stateMap[ss], alpha1);
+	  transprod = new Transition(stateMap[reachState[k]], stateMap[ss], alphaproject);
 	  //transprod->toString();
 	  //cout << reachState[k] << " " << ss << endl;
 	  (*intersectTrans)[stateMap[reachState[k]]].push_back(transprod);
@@ -621,7 +626,7 @@ BA* intersectSelAlpha(BA* aut, BA* comp){
 	  //Include the new transition only if the same transition hasn't been inserted before. Is it even worth doing?
 	  
 	}
-	alphaprod = "";
+	alphaproject = "";
 	ss = "";
       }
     }
