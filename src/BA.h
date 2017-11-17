@@ -43,6 +43,9 @@ class BA{
 
   void setAlphabet(vector<string>* alphaList);
   void setTrans(unordered_map<int, vector<Transition*>>* transitionF);
+
+  void writeToFile(string filename);
+  
  private:
   int numState;
   vector<string> alphabet;

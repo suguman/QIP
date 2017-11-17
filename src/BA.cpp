@@ -162,3 +162,52 @@ void BA::setAlphabet(vector<string>* alphaList){
 void BA::setTrans(unordered_map<int, vector<Transition*>>* transitionF){
   this->transFunc = *transitionF;
 }
+
+
+void BA::writeToFile(string filename){
+  ofstream outFile;
+  outFile.open(filename+".ba");
+
+  string initStr = "";
+  vector <int> * initList = this->getInitial();
+  int numInit = initList->size();
+  for (int i = 0; i < numInit; i++){
+    initStr = to_string((*initList)[i]) + "\n";
+  }
+  outFile << initStr;
+  outFile.flush();
+
+  string transStr = "";
+  int numTrans = 0;
+  int flushInt = 1;
+  Transition* trans;
+  unordered_map <int, vector<Transition*>>* transMap = this->getTrans();
+  int num = this->getStateNum();
+  for (int j = 0 ; j < num ; j++){
+    numTrans = (*transMap)[j].size();
+    for (int k = 0; k < numTrans; k++){
+      trans = (*transMap)[j][k];
+      transStr += trans->getAlpha() + "," + to_string(trans->getSrc()) + "->" + to_string(trans->getDest()) + "\n";
+      flushInt += 1;
+      if (flushInt%10000 == 0){
+	outFile << transStr;
+	outFile.flush();
+	transStr = "";
+	flushInt = 1;
+      }
+    }
+  }
+  outFile << transStr;
+  outFile.flush();
+  
+  string finalStr = "";
+  vector<int>* finalList = this->getFinal();
+  int numFinal = finalList->size();
+  for (int l = 0; l < numFinal; l++){
+    finalStr += to_string((*finalList)[l]) + "\n";
+  }
+  outFile << finalStr;
+  outFile.flush();
+    
+  outFile.close();
+}

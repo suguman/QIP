@@ -10,6 +10,7 @@
 #include "BA.h"
 #include "DSComparator.h"
 #include "Transition.h"
+#include "rabitUtils.h"
 #include "rwUtils.h"
 #include "wBA.h"
 #include "wTransition.h"
@@ -74,8 +75,8 @@ int main (){
   BA* autba = readBA("testfile2.txt");
   //autba->printAll();
 
-  int ar[] = {0, 1, 2};
-  BA* dstest = makeDS(4, ar, 3);
+  int ar[] = {0, 1, -1};
+  BA* dstest = makeDS(2, ar, 3);
   //dstest->printAll();
   //dstest.printAll();
 
@@ -87,5 +88,12 @@ int main (){
 
   autnew->printAlpha();
   autnew->printTrans();
+
+  //reduce("testBA");
+
+  //string filename = "DS";
+  //dstest->writeToFile(filename);
+  //dstest->printFinal();
+  reduce ("Testing");
 return 0;
 }
