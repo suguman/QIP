@@ -45,6 +45,7 @@ class BA{
   void setTrans(unordered_map<int, vector<Transition*>>* transitionF);
 
   void writeToFile(string filename);
+  void writeDSToFile(string filename);
   
  private:
   int numState;

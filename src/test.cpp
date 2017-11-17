@@ -91,9 +91,9 @@ int main (){
 
   //reduce("testBA");
 
-  //string filename = "DS";
-  //dstest->writeToFile(filename);
-  //dstest->printFinal();
-  reduce ("Testing");
+  string filename = "DS";
+  dstest->writeDSToFile(filename);
+  dstest->printFinal();
+  reduce (filename);
 return 0;
 }
