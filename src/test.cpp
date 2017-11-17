@@ -82,6 +82,10 @@ int main (){
   BA* inter = intersectSelAlpha(autprod, dstest);
   //inter->printAll();
 
+  autnew->printAlpha();
   projectOutWt(autnew);
+
+  autnew->printAlpha();
+  autnew->printTrans();
 return 0;
 }

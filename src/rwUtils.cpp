@@ -668,6 +668,7 @@ void projectOutWt(BA* aut){
   //project Map
   unordered_map <string, string> projectMap;
   vector <string>* alphaList = aut->getAlpha();
+  vector <string>* newAlphaList = new vector<string> {};
   int numAlpha = alphaList->size();
   string alphaproject;
   string alpha;
@@ -675,14 +676,38 @@ void projectOutWt(BA* aut){
   int sepLen = 2;
   for (int i = 0; i < numAlpha; i++){
     alpha = (*alphaList)[i];
-    cout << alpha << endl;
+    //cout << alpha << endl;
     alphaproject = alpha.substr(0, alpha.find(sep)+sepLen);
     alpha.erase(0, alpha.find(sep)+2);
     alphaproject += alpha.erase(0,alpha.find(sep)+2);
-    cout << alphaproject << endl;
+    //cout << alphaproject << " " << alpha << endl;
+    projectMap[(*alphaList)[i]] = alphaproject;
+    newAlphaList->push_back(alphaproject);
   }
-  //TODO
-  // If alpha not in unordered_map projectMap, then project out the old alpha
+
+  //aut->alphabet = *newAlphaList;
+  aut->setAlphabet(newAlphaList);
   
-  //Modify all transitions accordingly
+
+  int numState = aut->getStateNum();
+  int numTrans;
+  Transition* trans;
+  Transition* newTrans;
+  unordered_map<int, vector<Transition*> > * transitionF = aut->getTrans();
+  unordered_map<int, vector<Transition*> > * newTransF = new unordered_map <int, vector<Transition*> >  {};
+  for (int j = 0; j < numState; j++){
+    (*newTransF)[j] = vector <Transition*> {};
+    numTrans = (*transitionF)[j].size();
+    for (int k=0; k < numTrans; k++){
+      trans = (*transitionF)[j][k];
+      trans->toString();
+      newTrans = new Transition (trans->getSrc(), trans->getDest(), projectMap[trans->getAlpha()]);
+      (*newTransF)[j].push_back(newTrans);
+      newTrans->toString();
+	
+    }
+  }
+
+  aut->setTrans(newTransF);
+  
 }

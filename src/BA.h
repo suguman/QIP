@@ -40,7 +40,9 @@ class BA{
   void printAll();
 
   void addInitial(int i);
-  
+
+  void setAlphabet(vector<string>* alphaList);
+  void setTrans(unordered_map<int, vector<Transition*>>* transitionF);
  private:
   int numState;
   vector<string> alphabet;

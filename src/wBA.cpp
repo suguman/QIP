@@ -138,7 +138,7 @@ BA* wBA::augmentWtLabel(){
 
       trans = new Transition(j, ptrTrans->getDest(), str);
       alphaList->push_back(str);
-      cout << str << " " << alphaList->size() << endl;
+      //cout << str << " " << alphaList->size() << endl;
       (*transMap)[j].push_back(trans);
       
       }

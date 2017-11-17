@@ -153,3 +153,12 @@ void BA::addInitial(int i){
   ptrInit->push_back(i);
   cout << ptrInit->size() << endl;
 }
+
+void BA::setAlphabet(vector<string>* alphaList){
+  this->alphabet = *alphaList;
+}
+
+
+void BA::setTrans(unordered_map<int, vector<Transition*>>* transitionF){
+  this->transFunc = *transitionF;
+}
