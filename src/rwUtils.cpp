@@ -335,32 +335,34 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
 
   int numState = 0; 
   int numInit = 0;
-  
-  vector<int>::iterator it1;
-  vector<int>::iterator it2;
+
   vector<int>* init1 = aut1->getInitial();
   vector<int>* init2 = aut2->getInitial();
-
+  int aut1InitLen = init1->size();
+  int aut2InitLen = init2->size();
+  
   vector<string> reachState = {};
 
+  //aut->printInitial();
+  //comp->printInitial();
   
-  for(it1 = init1->begin(); it1!= init1->end(); ++it1){
-    //cout << (*init1)[*it1] << endl;
-    for(it2 = init2->begin(); it2!= init2->end(); ++it2){
-      //cout << (*init1)[*it1] << " " << (*init2)[*it2] << endl;
-      ss = to_string((*init1)[*it1]);
+  for (int it1 = 0; it1 < aut1InitLen; it1++){
+    for (int it2 = 0; it2 < aut2InitLen ; it2++){
+      ss = to_string((*init1)[it1]);
       ss += sep;
-      ss += to_string((*init2)[*it2]);
+      ss += to_string((*init2)[it2]);
+
+      cout << ss << endl;
       stateMap[ss] = numState;
       reachState.push_back(ss);
-      //cout << ss << " " << stateMap[ss]<< " " << reachState.size() << endl;
-      //(*prodTrans)[ss] =  vector<Transition*> {};
       ss = "";
       numState += 1;
       numInit += 1;
+      
     }
   }
 
+  
   unordered_map<int, vector<Transition*>>* prodTrans = new unordered_map<int, vector<Transition*>> {};
   vector <string>* alphaList = new vector<string>{};
   unordered_map<int, vector<Transition*>>*  aut1Trans = aut1->getTrans();
@@ -478,4 +480,178 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
   return aut;
   //BA* trivial = new BA();
   //return trivial;
+}
+
+
+BA* intersectSelAlpha(BA* aut, BA* comp){
+
+  int autState = aut->getStateNum();
+  int compState = comp->getStateNum();
+  //int numprodstate = aut->getStateNum() * comp->getStateNum();
+  string ss = "";
+  string sep = "_";
+
+  unordered_map<string, int> stateMap;
+  for (int i=0; i < autState; i++){
+    for (int j=0; j< compState; j++){
+      ss = to_string(i);
+      ss += sep;
+      ss += to_string(j);
+      stateMap[ss] = -1;
+      ss = "";
+    }
+  }
+
+  int numState = 0; 
+  int numInit = 0;
+  
+  
+  
+  vector<int>* init1 = aut->getInitial();
+  vector<int>* init2 = comp->getInitial();
+  int autInitLen = init1->size();
+  int compInitLen = init2->size();
+  
+  vector<string> reachState = {};
+
+  //aut->printInitial();
+  //comp->printInitial();
+  
+  for (int it1 = 0; it1 < autInitLen; it1++){
+    for (int it2 = 0; it2 < compInitLen ; it2++){
+      ss = to_string((*init1)[it1]);
+      ss += sep;
+      ss += to_string((*init2)[it2]);
+
+      //cout << ss << endl;
+      stateMap[ss] = numState;
+      reachState.push_back(ss);
+      ss = "";
+      numState += 1;
+      numInit += 1;
+      
+    }
+  }
+
+  unordered_map<int, vector<Transition*>>* intersectTrans = new unordered_map<int, vector<Transition*>> {};
+  vector <string>* alphaList = new vector<string>{};
+  unordered_map<int, vector<Transition*>>*  autTrans = aut->getTrans();
+  unordered_map<int, vector<Transition*>>*  compTrans = comp->getTrans();
+  int autNumTrans = autTrans->size();
+  int compNumTrans = compTrans->size();
+
+  string stateStr;
+  string str1;
+  string str2;
+  int s1;
+  int s2;
+  int p;
+  int len1;
+  int len2;
+  string wtStr;
+  Transition* transprod;
+  Transition* trans1;
+  Transition* trans2;
+  string dest1;
+  string dest2;
+  int d1;
+  int d2;
+  string alpha1;
+  string alpha2;
+  string alphaprod;
+  string alphasep = ";;";
+  int alphaseplen = 2;
+  
+  for (int k = 0; k < reachState.size(); k++){
+    stateStr = reachState[k];
+    (*intersectTrans)[stateMap[stateStr]] =  vector<Transition*> {};
+    p = stateStr.find(sep);
+    str1 = stateStr.substr(0, p);
+    str2 = stateStr.erase(0, p+1);
+    s1 = stoi(str1);
+    s2 = stoi(str2);
+
+    //Look at transition list from state s1 in aut1 and s2 in aut2
+    // make the new transition, and add that to s1_s2
+    // look at the destination of new transition. If destination is already in reachState, we are fine, else add it to reachState and assign its state number in stateMap
+    len1 = (*autTrans)[s1].size();
+    len2 = (*compTrans)[s2].size();
+    for (int t1 = 0; t1 < len1; t1++){
+      for (int t2 = 0; t2 < len2; t2++){
+	trans1  = (*autTrans)[s1][t1];
+	trans2  = (*compTrans)[s2][t2];
+
+	//trans1->toString();
+	//trans2->toString();
+	
+	alpha1 = trans1->getAlpha();
+	wtStr  = alpha1.substr(alpha1.find(alphasep)+ alphaseplen);
+	wtStr.erase(wtStr.find(alphasep));
+	alpha2 = trans2->getAlpha();
+	//cout << alpha1 << " " << alpha2 << " " << wtStr << endl;
+		
+	//cout << alpha1 << " " << alpha2 << endl;
+	if (wtStr == alpha2){
+	
+	  alphaList->push_back(alpha1);
+	   
+	  
+	  //Make the product destination
+	  d1 = trans1->getDest();
+	  d2 = trans2->getDest();
+	  
+	  ss = to_string(d1);
+	  ss += sep;
+	  ss += to_string(d2);
+	  //cout << ss << endl;
+	  
+	  if (stateMap[ss] == -1){
+	    stateMap[ss] = numState;
+	    numState += 1;
+	    reachState.push_back(ss);
+	  }
+
+	  //Make prod transition, and add to the relevant place
+	  //cout << "new transition " << endl;
+	  transprod = new Transition(stateMap[reachState[k]], stateMap[ss], alpha1);
+	  //transprod->toString();
+	  //cout << reachState[k] << " " << ss << endl;
+	  (*intersectTrans)[stateMap[reachState[k]]].push_back(transprod);
+	  //TODO
+	  //Include the new transition only if the same transition hasn't been inserted before. Is it even worth doing?
+	  
+	}
+	alphaprod = "";
+	ss = "";
+      }
+    }
+  }
+  
+
+  //Making final states
+  
+  vector<int>* finalComp = comp->getFinal();
+  int lenFinal = finalComp->size();
+
+  vector <int>* finalList = new vector<int> {};
+  for (int ai = 0; ai < autState; ai++){
+    for (int ci = 0; ci < lenFinal; ci++){
+      ss = to_string(ai);
+      ss += sep;
+      ss += to_string((*finalComp)[ci]);
+      //cout << "Final state is " << ai << " " << (*finalComp)[ci] << " State is " << stateMap[ss] <<endl;
+      if (stateMap[ss] != -1){
+	finalList->push_back(stateMap[ss]);
+      }
+    }
+  }
+
+  //Making inital states
+  vector<int>* initList = new vector<int> {};
+  for(int ii = 0; ii < numInit; ii++){
+    initList->push_back(ii);
+  }
+  
+  BA* intersect = new BA(numState, initList, finalList, alphaList,  intersectTrans );
+  return intersect;
 }

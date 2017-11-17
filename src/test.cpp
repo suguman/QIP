@@ -74,11 +74,12 @@ int main (){
   BA* autba = readBA("testfile2.txt");
   //autba->printAll();
 
-  int ar[] = {3, 7, 10};
+  int ar[] = {0, 1, 2};
   BA* dstest = makeDS(4, ar, 3);
   dstest->printAll();
   //dstest.printAll();
 
- 
+  BA* inter = intersectSelAlpha(autprod, dstest);
+  inter->printAll();
 return 0;
 }
