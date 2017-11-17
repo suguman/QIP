@@ -23,4 +23,6 @@ BA* sameAlphaProd(BA* aut1, BA* aut2);
 
 BA* intersectSelAlpha(BA* aut, BA* comp);
 
+void projectOutWt(BA* aut);
+
 #endif

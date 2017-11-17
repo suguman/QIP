@@ -660,3 +660,15 @@ BA* intersectSelAlpha(BA* aut, BA* comp){
   BA* intersect = new BA(numState, initList, finalList, alphaList,  intersectTrans );
   return intersect;
 }
+
+void projectOutWt(BA* aut){
+  //Project out wt component in place. Modify all alphabet from alpha;;wt;;label to alpha;;label in transitions and alphabet in place.
+  //No need to allocate new memory
+
+  //project Map
+  unordered_map <string, string> projectMap;
+  //TODO
+  // If alpha not in unordered_map projectMap, then project out the old alpha
+
+  //Modify all transitions accordingly
+}
