@@ -172,7 +172,7 @@ void BA::writeToFile(string filename){
   vector <int> * initList = this->getInitial();
   int numInit = initList->size();
   for (int i = 0; i < numInit; i++){
-    initStr = to_string((*initList)[i]) + "\n";
+    initStr = "["+to_string((*initList)[i]) + "]\n";
   }
   outFile << initStr;
   outFile.flush();
@@ -187,7 +187,7 @@ void BA::writeToFile(string filename){
     numTrans = (*transMap)[j].size();
     for (int k = 0; k < numTrans; k++){
       trans = (*transMap)[j][k];
-      transStr += trans->getAlpha() + "," + to_string(trans->getSrc()) + "->" + to_string(trans->getDest()) + "\n";
+      transStr += trans->getAlpha() + ",[" + to_string(trans->getSrc()) + "]->[" + to_string(trans->getDest()) + "]\n";
       flushInt += 1;
       if (flushInt%10000 == 0){
 	outFile << transStr;
@@ -204,7 +204,7 @@ void BA::writeToFile(string filename){
   vector<int>* finalList = this->getFinal();
   int numFinal = finalList->size();
   for (int l = 0; l < numFinal; l++){
-    finalStr += to_string((*finalList)[l]) + "\n";
+    finalStr += "["+to_string((*finalList)[l]) + "]\n";
   }
   outFile << finalStr;
   outFile.flush();
@@ -223,7 +223,7 @@ void BA::writeDSToFile(string filename){
   vector <int> * initList = this->getInitial();
   int numInit = initList->size();
   for (int i = 0; i < numInit; i++){
-    initStr = to_string((*initList)[i]) + "\n";
+    initStr = "["+to_string((*initList)[i]) + "]\n";
   }
   outFile << initStr;
   outFile.flush();
@@ -241,10 +241,10 @@ void BA::writeDSToFile(string filename){
       trans = (*transMap)[j][k];
       alphaAux = trans->getAlpha()[0];
       if (alphaAux == "-"){
-	transStr += "a"+trans->getAlpha().substr(1) + "," + to_string(trans->getSrc()) + "->" + to_string(trans->getDest()) + "\n";
+	transStr += "a"+trans->getAlpha().substr(1) + ",[" + to_string(trans->getSrc()) + "]->[" + to_string(trans->getDest()) + "]\n";
       }
       else {
-	transStr += trans->getAlpha() + "," + to_string(trans->getSrc()) + "->" + to_string(trans->getDest()) + "\n";
+	transStr += trans->getAlpha() + ",[" + to_string(trans->getSrc()) + "]->[" + to_string(trans->getDest()) + "]\n";
       }
       flushInt += 1;
       if (flushInt%10000 == 0){
@@ -262,7 +262,7 @@ void BA::writeDSToFile(string filename){
   vector<int>* finalList = this->getFinal();
   int numFinal = finalList->size();
   for (int l = 0; l < numFinal; l++){
-    finalStr += to_string((*finalList)[l]) + "\n";
+    finalStr += "["+to_string((*finalList)[l]) + "]\n";
   }
   outFile << finalStr;
   outFile.flush();

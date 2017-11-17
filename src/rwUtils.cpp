@@ -167,8 +167,6 @@ wBA* readWBA(string filename){
 
 
 
-// Takes filename as input (file.txt)
-// Reads file and generates the corresponding weighted automata
 BA* readBA(string filename){
   ifstream inFile;
   

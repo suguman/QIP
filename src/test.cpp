@@ -91,6 +91,7 @@ int main (){
 
   //reduce("testBA");
 
+  autnew->writeToFile("test");
   string filename = "DS";
   dstest->writeDSToFile(filename);
   dstest->printFinal();
