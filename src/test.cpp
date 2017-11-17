@@ -69,17 +69,19 @@ int main (){
   autnew->printAll();
 
   BA* autprod = sameAlphaProd(aut, autnew);
-  autprod->printAll();
+  //autprod->printAll();
 
   BA* autba = readBA("testfile2.txt");
   //autba->printAll();
 
   int ar[] = {0, 1, 2};
   BA* dstest = makeDS(4, ar, 3);
-  dstest->printAll();
+  //dstest->printAll();
   //dstest.printAll();
 
   BA* inter = intersectSelAlpha(autprod, dstest);
-  inter->printAll();
+  //inter->printAll();
+
+  projectOutWt(autnew);
 return 0;
 }

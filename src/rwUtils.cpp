@@ -667,8 +667,22 @@ void projectOutWt(BA* aut){
 
   //project Map
   unordered_map <string, string> projectMap;
+  vector <string>* alphaList = aut->getAlpha();
+  int numAlpha = alphaList->size();
+  string alphaproject;
+  string alpha;
+  string sep = ";;";
+  int sepLen = 2;
+  for (int i = 0; i < numAlpha; i++){
+    alpha = (*alphaList)[i];
+    cout << alpha << endl;
+    alphaproject = alpha.substr(0, alpha.find(sep)+sepLen);
+    alpha.erase(0, alpha.find(sep)+2);
+    alphaproject += alpha.erase(0,alpha.find(sep)+2);
+    cout << alphaproject << endl;
+  }
   //TODO
   // If alpha not in unordered_map projectMap, then project out the old alpha
-
+  
   //Modify all transitions accordingly
 }

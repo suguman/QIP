@@ -60,7 +60,8 @@ BA* wBA::augmentWt(){
   
   int numState = this->getStateNum();
   vector<int>* initList = this->getInitial();
-  vector<string>* alphaList = this->getAlpha();
+  //vector<string>* alphaList = this->getAlpha();
+  vector<string>* alphaList = new vector<string> {};
   vector<int>* finalList = this->getFinal();
   unordered_map<int, vector< Transition*>> * wtransMap = this->getTrans();
 
@@ -87,7 +88,7 @@ BA* wBA::augmentWt(){
       trans = new Transition(j, ptrTrans->getDest(), str);
 
       (*transMap)[j].push_back(trans);
- 
+      alphaList->push_back(str);
       }
   }
 
@@ -104,7 +105,8 @@ BA* wBA::augmentWtLabel(){
   
   int numState = this->getStateNum();
   vector<int>* initList = this->getInitial();
-  vector<string>* alphaList = this->getAlpha();
+  //vector<string>* alphaList = this->getAlpha();
+  vector <string>* alphaList = new vector<string> {};
   vector<int>* finalList = this->getFinal();
   unordered_map<int, vector< Transition*>> * wtransMap = this->getTrans();
 
@@ -135,7 +137,8 @@ BA* wBA::augmentWtLabel(){
       totalTrans += 1;
 
       trans = new Transition(j, ptrTrans->getDest(), str);
-
+      alphaList->push_back(str);
+      cout << str << " " << alphaList->size() << endl;
       (*transMap)[j].push_back(trans);
       
       }
