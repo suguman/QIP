@@ -616,7 +616,7 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
 	  int wt2 = stoi(alpha2.substr(0, dlen));
 	  alpha2.erase(0, alpha2.find(alphasep));
 	  //alphaprod += to_string(wt1 - wt2);
-	  alphaprod += to_string(wt2 - wt1);
+	  alphaprod += to_string(wt1 - wt2);
 	  alphaprod += alpha2;
 	  
 	  /*
@@ -892,10 +892,10 @@ void projectOutWt(BA* aut){
     numTrans = (*transitionF)[j].size();
     for (int k=0; k < numTrans; k++){
       trans = (*transitionF)[j][k];
-      trans->toString();
+      //trans->toString();
       newTrans = new Transition (trans->getSrc(), trans->getDest(), projectMap[trans->getAlpha()]);
       (*newTransF)[j].push_back(newTrans);
-      newTrans->toString();
+      //newTrans->toString();
 	
     }
   }

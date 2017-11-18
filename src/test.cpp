@@ -24,12 +24,14 @@ int main (int argc, char** argv){
   wBA* waut1 = readWBA(filename1);
   wBA* waut2 = readWBA(filename2);
 
-  waut1->printAll();
-  waut2->printAll();
+  //waut1->printAll();
+  //waut2->printAll();
 
   BA* aut1 = waut1->augmentWtLabel();
   BA* aut2 = waut2->augmentWt();
-
+  //aut1->printAll();
+  //aut2->printAll();
+  
   //aut1->printAll();
   //aut2->printAll();
   
@@ -39,6 +41,7 @@ int main (int argc, char** argv){
 
   BA* dstest = makeDSComparator(autprod->getAlpha(), df);
   //dstest->printAll();
+  //dstest->printAlpha();
   
   BA* interproject = intersectSelAlpha(autprod, dstest);
   //interproject->printAll();

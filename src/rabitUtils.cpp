@@ -33,7 +33,8 @@ bool checkEqui(BA* aut1, BA* aut2, string outputfile){
   aut1->writeToFile(outputfile+"_0");
   aut2->writeToFile(outputfile+"_1");
   //string equi1command = "java -jar " + RABITPATH + "RABIT.jar " + filename1 + ".ba " + filename2 + ".ba > "+filename1+filename2+"output.txt";
-  string equi1command = "java -jar " + RABITPATH + "RABIT.jar " +  outputfile+"_0.ba " + outputfile+"_0.ba  > " + outputfile+"_3.txt ";
+  string equi1command = "java -jar " + RABITPATH + "RABIT.jar " +  outputfile+"_0.ba " + outputfile+"_1.ba  > " + outputfile+"_3.txt ";
+  //string equi1command = "java -jar " + RABITPATH + "RABIT.jar " +  outputfile+"_0.ba " + outputfile+"_1.ba";
   system(equi1command.c_str());
 
   ifstream inFile;
@@ -42,6 +43,7 @@ bool checkEqui(BA* aut1, BA* aut2, string outputfile){
   inFile >> x;
   //string removeFileCommand = "rm " + filename1 + ".ba " + filename2 + ".ba " + filename1+filename2+"output.txt";
   string removeFileCommand = "rm " + outputfile+"_0.ba " + outputfile+"_1.ba " + outputfile+"_3.tx";
+  //cout << x << endl;
   if (x[0] == 'N'){
     //system(removeFileCommand.c_str());
     return 0;

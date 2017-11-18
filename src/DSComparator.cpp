@@ -85,7 +85,7 @@ BA* makeDS(int df, int* difList, int len){
 	    stateid = bot + to_string(lowx);
 	    trans = new Transition(0, stateMap[stateid], to_string(val));
 	    (*transFunction)[0].push_back(trans);
-	    trans->toString();
+	    //trans->toString();
 	    //cout << val << " " << stateid << endl;
 	  }
 	  else {
@@ -95,7 +95,7 @@ BA* makeDS(int df, int* difList, int len){
 	    stateid = to_string(lowx);
 	    trans = new Transition(0, stateMap[stateid], to_string(val));
 	    (*transFunction)[0].push_back(trans);
-	    trans->toString();
+	    //trans->toString();
 	    //cout << val << " " <<  stateid << endl;
 	    }
 	  }
@@ -195,7 +195,7 @@ BA* makeDSComparator(vector<string>* alphaList, int df){
     //cout << elem << endl;
     
     for (int j=0; j<numUnique; j++){
-      cout << "Check " << ar[j] << endl;
+      //cout << "Check " << ar[j] << endl;
       if (elem == ar[j]){
 	present = 1;
       }
@@ -206,10 +206,14 @@ BA* makeDSComparator(vector<string>* alphaList, int df){
     }
     present = 0;
   }
-  
-  BA* DS = reduce(makeDS(df, ar, numUnique));
-  
-  return DS;
+
+  for (int n = 0; n < numUnique; n++){
+    //cout << ar[n] << endl;
+  }
+  BA* dsaut = reduce(makeDS(df, ar, numUnique));
+  //BA* dsaut = makeDS(df, ar, numUnique);
+  //dsaut->printAll();
+  return dsaut;
 }
 /*
 
