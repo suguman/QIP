@@ -19,6 +19,8 @@ wBA* readWBA(string filename);
 
 BA* readBA(string filename);
 
+BA* readDS(string filename);
+
 
 BA* sameAlphaProd(BA* aut1, BA* aut2);
 

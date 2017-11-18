@@ -72,7 +72,7 @@ int main (){
   BA* autprod = sameAlphaProd(aut, autnew);
   //autprod->printAll();
 
-  BA* autba = readBA("testfile2.txt");
+  //BA* autba = readBA("testfile2.txt");
   //autba->printAll();
 
   int ar[] = {0, 1, -1};
@@ -92,9 +92,14 @@ int main (){
   //reduce("testBA");
 
   autnew->writeToFile("test");
+  BA* autba2 = readBA("test.ba");
+  autba2->printAll();
+  
   string filename = "DS";
   dstest->writeDSToFile(filename);
   dstest->printFinal();
   reduce (filename);
+  BA* dsreduced = readDS("reduced_30_"+filename+".ba");
+  dsreduced->printAll();
 return 0;
 }

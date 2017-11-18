@@ -53,9 +53,10 @@ BA::BA(int num,  int numInit, int numFinal, int numAlpha,  int *pInit, int *pFin
     (this->transFunc)[src].push_back((*transList)[j]);
     
   }
-  //End of the new code
+  
   
 }
+
 
 BA::BA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, unordered_map<int, vector<Transition*> >* transMap){
   this->numState = num;
@@ -64,6 +65,28 @@ BA::BA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* a
   this->final = *finalList;
   this->transFunc = *transMap;
 }
+
+BA::BA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, vector <Transition*>* transList){
+  this->numState = num;
+  this->alphabet = *alphaList;
+  this->initial = *initList;
+  this->final = *finalList;
+
+  for (int i=0; i < num; i++){
+    this->transFunc[i] = vector<Transition*> {};
+  }
+  int len = (*transList).size();
+  int src = 0;
+  for (int j=0; j < len; j++){
+    src = (*(*transList)[j]).getSrc();
+    //(*transList)[j]->toString();
+    (this->transFunc)[src].push_back((*transList)[j]);
+    
+  }
+  
+  
+}
+
 
 BA::~BA(){
   //TODO
@@ -241,7 +264,7 @@ void BA::writeDSToFile(string filename){
       trans = (*transMap)[j][k];
       alphaAux = trans->getAlpha()[0];
       if (alphaAux == "-"){
-	transStr += "a"+trans->getAlpha().substr(1) + ",[" + to_string(trans->getSrc()) + "]->[" + to_string(trans->getDest()) + "]\n";
+	transStr += "n"+trans->getAlpha().substr(1) + ",[" + to_string(trans->getSrc()) + "]->[" + to_string(trans->getDest()) + "]\n";
       }
       else {
 	transStr += trans->getAlpha() + ",[" + to_string(trans->getSrc()) + "]->[" + to_string(trans->getDest()) + "]\n";

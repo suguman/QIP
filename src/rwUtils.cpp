@@ -183,6 +183,8 @@ BA* readBA(string filename){
   string delimiter2 = "->";
   int delimiter2Len = 2;
   int numState = 0;
+  string openState = "[";
+  string closeState = "]";
   
   unordered_map<string, int> alphaMap = {};
   unordered_map<string, int>::const_iterator got2;
@@ -196,26 +198,40 @@ BA* readBA(string filename){
   bool areEqual;
   bool endInit = 0;
   int numInit = 0;
+  vector<int>* initList = new vector<int> {};
 
   //Transition function declarations
   string alpha;
   string srcStr;
   string destStr;
+  string srcStrTemp;
+  string destStrTemp;
+  string stateStr;
   //string wtStr;
   Transition* ptrTrans;
   vector <Transition*> ptrTransList = {};
 
+  //Final state declariations
+  bool beginFinal = 0;
+  string finalStr;
+  vector<int>* finalList = new vector<int> {};
   while (inFile >> x){
-
+    //cout << x << endl;
     if (!endInit){
+
       
       areEqual = (x.length() == (x.substr(0, x.find(delimiter1))).length());
       if (areEqual and !endInit){
-	got = stateMap.find(stoi(x));
+	stateStr = x.substr(x.find(openState)+1, x.find(closeState)-1);
+	//cout << stateStr << endl;
+	//got = stateMap.find(stoi(x));
+	got = stateMap.find(stoi(stateStr));
 	if (got == stateMap.end()){
-	  stateMap.insert({stoi(x),numState});
+	  //stateMap.insert({stoi(x),numState});
+	  stateMap.insert({stoi(stateStr),numState});
+	  initList->push_back(numState);
 	  numState+=1;
-	  numInit+=1;
+	  
 	}
 
       }
@@ -225,88 +241,265 @@ BA* readBA(string filename){
       }
     }
 
-    if (endInit){
-
-      //parsing transition line
+    if (endInit and !beginFinal){
       
-      int index = x.find(delimiter1);
-      alpha = x.substr(0, index);
+      areEqual = (x.length() == (x.substr(0, x.find(delimiter1))).length());
+      if (!areEqual){
+	//parsing transition line
+      
+	int index = x.find(delimiter1);
+	alpha = x.substr(0, index);
  
-      x.erase(0, index + delimiter1Len);
-      index = x.find(delimiter2);
-      srcStr = x.substr(0, index);
-  
-      destStr = x.erase(0, index+delimiter2Len);
-      //index = x.find(delimiter1);
-      //destStr = x.substr(0, index);
-    
-      //wtStr = x.erase(0, index+delimiter1Len);
-    
-
-      //src State
-      got = stateMap.find(stoi(srcStr));
+	x.erase(0, index + delimiter1Len);
+	index = x.find(delimiter2);
+	srcStrTemp = x.substr(0, index);
+	srcStr = srcStrTemp.substr(srcStrTemp.find(openState)+1, srcStrTemp.find(closeState)-1);
+				 
+	destStrTemp = x.erase(0, index+delimiter2Len);
+	destStr = destStrTemp.substr(destStrTemp.find(openState)+1, destStrTemp.find(closeState)-1);
       
-      if (got == stateMap.end()){
-
-	stateMap.insert({stoi(srcStr),numState});
-	numState+=1;
-
-      }
-
-      //dest State
-      got = stateMap.find(stoi(destStr));
+	//cout << alpha << " " <<  srcStrTemp  << " " << destStrTemp  << endl;
+	//cout << "Source is :: " << srcStr << endl;
+	//cout << "Destination is :: " << destStr << endl;
+	//index = x.find(delimiter1);
+	//destStr = x.substr(0, index);
     
-      if (got == stateMap.end()){
-	stateMap.insert({stoi(destStr),numState});
+	//wtStr = x.erase(0, index+delimiter1Len);
+    
 
-	numState+=1;
-	
-      }
+	//src State
+	got = stateMap.find(stoi(srcStr));
+      
+	if (got == stateMap.end()){
 
-      got2 = alphaMap.find(alpha);
-      if (got2 == alphaMap.end()){
-	alphaMap.insert({alpha,0});
+	  stateMap.insert({stoi(srcStr),numState});
+	  numState+=1;
+	  
+	}
 
-      }
+	//dest State
+	got = stateMap.find(stoi(destStr));
+    
+	if (got == stateMap.end()){
+	  stateMap.insert({stoi(destStr),numState});
 
-      //Making transition
+	  numState+=1;
+	  
+	}
 
-      ptrTrans = new Transition(stateMap[stoi(srcStr)], stateMap[stoi(destStr)], alpha);
+	got2 = alphaMap.find(alpha);
+	if (got2 == alphaMap.end()){
+	  alphaMap.insert({alpha,0});
+
+	}
+
+	//Making transition
+
+	ptrTrans = new Transition(stateMap[stoi(srcStr)], stateMap[stoi(destStr)], alpha);
      
-      ptrTransList.push_back(ptrTrans);
-     
+	ptrTransList.push_back(ptrTrans);
+      
+      }
+      else{
+	beginFinal = 1;
+      }
+      
+    }
+
+    if (endInit and beginFinal){
+      //TODO read final states
+      //cout << "Will read final states now" << endl;
+      finalStr = x.substr(x.find(openState)+1, x.find(closeState)-1);
+      //cout << finalStr << endl;
+      finalList->push_back(stateMap[stoi(finalStr)]);
     }
    
   }
 
-
-  // Making integer list for initial states,  since first states to be read are initial states
-  int initList[numInit];
-  for(int j=0; j < numInit; j++){
-    initList[j] = j;
-   
-  }
- 
-
-  // Making alpha list from alphaList, which is a vector
-  int k = 0;
-  string alphaList[alphaMap.size()];
+  vector<string>* alphaList = new vector <string> {};
   for (auto it = alphaMap.cbegin(); it != alphaMap.cend(); ++it){
-    alphaList[k] = it->first;
-    k+=1;
-    
+    alphaList->push_back(it->first);
+      
   }
 
-  // Makinng final state  list -- > Right now this is all states
-  int finalList[numState];
-  for(int l=0; l<numState; l++){
-    finalList[l] = l;
-  }
-  
   inFile.close();
 
   
-  BA* inputBA = new BA(numState, numInit, numState, k, initList, finalList, alphaList, &ptrTransList); 
+  BA* inputBA = new BA(numState, initList, finalList, alphaList, &ptrTransList); 
+  return inputBA;
+}
+
+
+BA* readDS(string filename){
+  ifstream inFile;
+  
+  inFile.open(filename);
+  if (!inFile){
+    cerr << "Unable to open file" << endl;
+    exit(1);
+  }
+
+  //General declarations
+  string x;
+  string delimiter1 = ",";
+  int delimiter1Len = 1;
+  string delimiter2 = "->";
+  int delimiter2Len = 2;
+  int numState = 0;
+  string openState = "[";
+  string closeState = "]";
+  
+  unordered_map<string, int> alphaMap = {};
+  unordered_map<string, int>::const_iterator got2;
+  //vector <string> alphaList = {};
+  
+  //state map
+  unordered_map <int, int> stateMap;
+  unordered_map<int, int>::const_iterator got;
+  
+  //Initial state declarations
+  bool areEqual;
+  bool endInit = 0;
+  int numInit = 0;
+  vector<int>* initList = new vector<int> {};
+
+  //Transition function declarations
+  string alphaTemp;
+  string alpha;
+  string srcStr;
+  string destStr;
+  string srcStrTemp;
+  string destStrTemp;
+  string stateStr;
+  //string wtStr;
+  Transition* ptrTrans;
+  vector <Transition*> ptrTransList = {};
+
+  //Final state declariations
+  bool beginFinal = 0;
+  string finalStr;
+  vector<int>* finalList = new vector<int> {};
+  while (inFile >> x){
+    //cout << x << endl;
+    if (!endInit){
+
+      
+      areEqual = (x.length() == (x.substr(0, x.find(delimiter1))).length());
+      if (areEqual and !endInit){
+	stateStr = x.substr(x.find(openState)+1, x.find(closeState)-1);
+	//cout << stateStr << endl;
+	//got = stateMap.find(stoi(x));
+	got = stateMap.find(stoi(stateStr));
+	if (got == stateMap.end()){
+	  //stateMap.insert({stoi(x),numState});
+	  stateMap.insert({stoi(stateStr),numState});
+	  initList->push_back(numState);
+	  numState+=1;
+	  
+	}
+
+      }
+      else{ 
+	endInit = 1;
+	
+      }
+    }
+
+    if (endInit and !beginFinal){
+      
+      areEqual = (x.length() == (x.substr(0, x.find(delimiter1))).length());
+      if (!areEqual){
+	//parsing transition line
+      
+	int index = x.find(delimiter1);
+	alphaTemp = x.substr(0, index);
+	cout << alphaTemp << " " << alphaTemp[0] << endl;
+	
+	if (alphaTemp[0] == 'n'){
+	  alpha = "-"+alphaTemp.substr(1);
+	}
+	else{
+	  alpha = alphaTemp;
+	}
+	
+	//alpha = alphaTemp;
+ 
+	x.erase(0, index + delimiter1Len);
+	index = x.find(delimiter2);
+	srcStrTemp = x.substr(0, index);
+	srcStr = srcStrTemp.substr(srcStrTemp.find(openState)+1, srcStrTemp.find(closeState)-1);
+				 
+	destStrTemp = x.erase(0, index+delimiter2Len);
+	destStr = destStrTemp.substr(destStrTemp.find(openState)+1, destStrTemp.find(closeState)-1);
+      
+	//cout << alpha << " " <<  srcStrTemp  << " " << destStrTemp  << endl;
+	//cout << "Source is :: " << srcStr << endl;
+	//cout << "Destination is :: " << destStr << endl;
+	//index = x.find(delimiter1);
+	//destStr = x.substr(0, index);
+    
+	//wtStr = x.erase(0, index+delimiter1Len);
+    
+
+	//src State
+	got = stateMap.find(stoi(srcStr));
+      
+	if (got == stateMap.end()){
+
+	  stateMap.insert({stoi(srcStr),numState});
+	  numState+=1;
+	  
+	}
+
+	//dest State
+	got = stateMap.find(stoi(destStr));
+    
+	if (got == stateMap.end()){
+	  stateMap.insert({stoi(destStr),numState});
+
+	  numState+=1;
+	  
+	}
+
+	got2 = alphaMap.find(alpha);
+	if (got2 == alphaMap.end()){
+	  alphaMap.insert({alpha,0});
+
+	}
+
+	//Making transition
+
+	ptrTrans = new Transition(stateMap[stoi(srcStr)], stateMap[stoi(destStr)], alpha);
+     
+	ptrTransList.push_back(ptrTrans);
+      
+      }
+      else{
+	beginFinal = 1;
+      }
+      
+    }
+
+    if (endInit and beginFinal){
+      //TODO read final states
+      //cout << "Will read final states now" << endl;
+      finalStr = x.substr(x.find(openState)+1, x.find(closeState)-1);
+      //cout << finalStr << endl;
+      finalList->push_back(stateMap[stoi(finalStr)]);
+    }
+   
+  }
+
+  vector<string>* alphaList = new vector <string> {};
+  for (auto it = alphaMap.cbegin(); it != alphaMap.cend(); ++it){
+    alphaList->push_back(it->first);
+      
+  }
+
+  inFile.close();
+
+  
+  BA* inputBA = new BA(numState, initList, finalList, alphaList, &ptrTransList); 
   return inputBA;
 }
 
