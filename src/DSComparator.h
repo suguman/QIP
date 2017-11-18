@@ -19,6 +19,7 @@ using namespace std;
 
 BA* makeDS(int df, int* difList, int len);
 
+BA* makeDSComparator(vector<string>* alphaList, int df);
   
 
 

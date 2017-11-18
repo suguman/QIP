@@ -903,3 +903,4 @@ void projectOutWt(BA* aut){
   aut->setTrans(newTransF);
   
 }
+

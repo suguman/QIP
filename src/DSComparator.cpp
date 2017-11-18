@@ -9,6 +9,7 @@
 #include "BA.h"
 #include "common.h"
 #include "DSComparator.h"
+#include "rabitUtils.h"
 
 
 using namespace std;
@@ -176,6 +177,40 @@ BA* makeDS(int df, int* difList, int len){
   }
 }
 
+BA* makeDSComparator(vector<string>* alphaList, int df){
+
+  int numAll = alphaList->size();
+  int elem;
+  int numUnique = 0;
+  int ar[numAll];
+  bool present = 0;
+  string delimiter = ";;";
+  string alpha;
+  for (int i = 0; i < numAll; i++){
+    alpha = (*alphaList)[i];
+    //cout << alpha << endl;
+    alpha.erase(0, alpha.find(delimiter)+2);
+    //cout << alpha << endl;
+    elem = stoi(alpha.substr(0, alpha.find(delimiter)));
+    //cout << elem << endl;
+    
+    for (int j=0; j<numUnique; j++){
+      cout << "Check " << ar[j] << endl;
+      if (elem == ar[j]){
+	present = 1;
+      }
+    }
+    if (!present){
+      ar[numUnique] = elem;
+      numUnique += 1;
+    }
+    present = 0;
+  }
+  
+  BA* DS = reduce(makeDS(df, ar, numUnique));
+  
+  return DS;
+}
 /*
 
 DS::~DS(){
