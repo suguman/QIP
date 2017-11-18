@@ -14,6 +14,7 @@
 
 using namespace std;
 
-void reduce(string filename);
+BA* reduce(string filename);
 
+bool checkEqui(BA* aut1, BA* aut2, string filename1, string filename2);
 #endif

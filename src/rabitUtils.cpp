@@ -16,16 +16,37 @@
 using namespace std;
 
 string RABITPATH = "../../Tools/RABIT/";
-//const char* RABITPATH = "../../Tools/RABIT/";
 
-void reduce(string filename){
-  //const char* command = "java -Xss1G -Xms1G -jar ../../Tools/RABIT/Reduce.jar test1.ba 30";
+
+BA* reduce(string filename){
+ 
   string reduceCommand = "java -Xss1G -Xms1G -jar " + RABITPATH + "Reduce.jar " + filename + ".ba 30";
   system(reduceCommand.c_str());
-  //BA* reducedBA = readBA("reduced_30_"+filename + ".ba");
+  BA* reducedBA = readBA("reduced_30_"+filename + ".ba");
   string removeFile = "rm " + filename + ".ba " + "reduced_30_" + filename + ".ba";
-  //system(removeFile.c_str());
+  system(removeFile.c_str());
+  return reducedBA;
 }
+
+bool checkEqui(BA* aut1, BA* aut2, string filename1, string filename2){
+  aut1->writeToFile(filename1);
+  aut2->writeToFile(filename2);
+  string equi1command = "java -jar " + RABITPATH + "RABIT.jar " + filename1 + ".ba " + filename2 + ".ba > "+filename1+filename2+"output.txt";
+  system(equi1command.c_str());
+
+  ifstream inFile;
+  inFile.open(filename1+filename2+"output.txt");
+  string x;
+  inFile >> x;
+  string removeFileCommand = "rm " + filename1 + ".ba " + filename2 + ".ba " + filename1+filename2+"output.txt";
+  if (x[0] == 'N'){
+    //system(removeFileCommand.c_str());
+    return 0;
+  }
+  //system(removeFileCommand.c_str());
+  return 1;
+}
+
 
 /*
 

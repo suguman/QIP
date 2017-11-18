@@ -13,6 +13,8 @@
 
 using namespace std;
 
+//Accepts sequence V iff DS(v, df) > 0
+
 BA* makeDS(int df, int* difList, int len){
 
   if (len == 0){

@@ -534,8 +534,8 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
   
   vector<string> reachState = {};
 
-  //aut->printInitial();
-  //comp->printInitial();
+  //aut1->printAlpha();
+  //aut2->printAlpha();
   
   for (int it1 = 0; it1 < aut1InitLen; it1++){
     for (int it2 = 0; it2 < aut2InitLen ; it2++){
@@ -543,7 +543,7 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
       ss += sep;
       ss += to_string((*init2)[it2]);
 
-      cout << ss << endl;
+      //cout << ss << endl;
       stateMap[ss] = numState;
       reachState.push_back(ss);
       ss = "";
@@ -615,7 +615,8 @@ BA* sameAlphaProd(BA* aut1, BA* aut2){
 	  alpha2.erase(0, posA+dlen);
 	  int wt2 = stoi(alpha2.substr(0, dlen));
 	  alpha2.erase(0, alpha2.find(alphasep));
-	  alphaprod += to_string(wt1 - wt2);
+	  //alphaprod += to_string(wt1 - wt2);
+	  alphaprod += to_string(wt2 - wt1);
 	  alphaprod += alpha2;
 	  
 	  /*

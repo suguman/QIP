@@ -1,11 +1,3 @@
-//#include <iostream>
-//#include <string>
-//#include <vector>
-
-
-//#include "common.h"
-
-
 
 #include "BA.h"
 #include "DSComparator.h"
@@ -15,48 +7,52 @@
 #include "wBA.h"
 #include "wTransition.h"
 
-int main (){
- 
-
-  Transition* mytrans = new Transition();
-  //(*mytrans).toString();
-  mytrans = new Transition(1, 2, "a");
-  //(*mytrans).toString();
-  mytrans = new wTransition();
-  //(*mytrans).toString();
-  mytrans = new wTransition(2, 4, "a", 5);
-  //(*mytrans).toString();
-  //(&mytrans).toString();
+int main (int argc, char** argv){
+  //0-th argument is ./quip
+  //1-st argument in discount-factor
+  //2-nd argument is filename1.txt
+  //3-rd argument is filename2.txt
   
-  vector< Transition > transList;
+  int df = stoi(argv[1]);
+  string filename1 = argv[2];
+  string filename2 = argv[3];
 
+  //cout << df << filename1 << filename2 << endl;
 
-  vector<Transition* > test;
-  test.push_back(mytrans);
-  //test[0]->toString();
+  wBA* waut1 = readWBA(filename1);
+  wBA* waut2 = readWBA(filename2);
 
-  Transition* mytrans2 = new wTransition(1, 2, "a", 10);
-  test.push_back(mytrans2);
-  //(*test[1]).toString();
-  wTransition* newP = (wTransition*) mytrans2;
-  //cout<< newP->getWt() << endl;
+  waut1->printAll();
+  waut2->printAll();
+
+  BA* aut1 = waut1->augmentWtLabel();
+  BA* aut2 = waut2->augmentWt();
+
+  aut1->printAll();
+  aut2->printAll();
   
-  int ar1[] = {8,9,10,11,12};
-  int ar2[] = {5,3};
-  string ar3[] = {"a", "b", "c", "d"};
-  
-  wBA aut2(8, 5, 2, 4,  ar1, ar2, ar3, &test);
-  //aut2.printAll();
-  vector<int> myWt = aut2.getWeight();
-  //cout << myWt.size() << endl;
-  //cout << myWt[0] << endl;
-  //cout << myWt[1] << endl;
+  BA* autprod = sameAlphaProd(aut2, aut1);
+  autprod->printAll();
 
-  wBA aut1;
-  aut1.addInitial(8);
-  //aut1.printInitial();
-  aut1.addInitial(9);
-  //aut1.printInitial();
+  //TODO : Extract weight from autprod
+  int ar[] = {0, 1, -1};
+  BA* dstest = makeDS(df, ar, 3);
+  
+
+  BA* interproject = intersectSelAlpha(autprod, dstest);
+  interproject->printAll();
+
+  projectOutWt(aut1);
+  aut1->printAll();
+
+  string file1 = "file1";
+  string file2  = "file2";
+  bool areEqual = checkEqui(aut1, interproject, file1, file2);
+  cout << areEqual << endl;
+  //aut1->writeToFile("file1");
+  //inter->writeToFile("file2");
+  
+  /*
 
   wBA* readAut = readWBA("textfile.txt");
   //cout << readAut.getTrans() << endl; 
@@ -75,8 +71,7 @@ int main (){
   //BA* autba = readBA("testfile2.txt");
   //autba->printAll();
 
-  int ar[] = {0, 1, -1};
-  BA* dstest = makeDS(2, ar, 3);
+  
   //dstest->printAll();
   //dstest.printAll();
 
@@ -101,5 +96,7 @@ int main (){
   reduce (filename);
   BA* dsreduced = readDS("reduced_30_"+filename+".ba");
   dsreduced->printAll();
+
+  */
 return 0;
 }
