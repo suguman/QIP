@@ -21,7 +21,12 @@ int main (int argc, char** argv){
   string filename2 = argv[3];
   string outputfile = argv[4];
 
-
+  ofstream ofs;
+  ofs.open (outputfile+".txt", std::ofstream::out | std::ofstream::app);
+  string outputStr = "N\n";
+  ofs << outputStr; 
+  ofs.close();
+  
   time_t startTime;
   time(&startTime);
   
@@ -78,7 +83,7 @@ int main (int argc, char** argv){
 
   ofstream ofs;
   ofs.open (outputfile+".txt", std::ofstream::out | std::ofstream::app);
-  string outputStr = to_string(areEqual) + " " + to_string(endTime-startTime) + " " + to_string(rabitEnd - rabitStart) + "\n";
+  outputStr = to_string(areEqual) + " " + to_string(endTime-startTime) + " " + to_string(rabitEnd - rabitStart) + "\n";
   ofs << outputStr; 
   ofs.close();
   //cout << areEqual <<" " <<  (endTime-startTime) <<  " " << (rabitEnd - rabitStart) << " " << endl;
