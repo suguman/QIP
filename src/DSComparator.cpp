@@ -18,8 +18,11 @@ using namespace std;
 
 BA* makeDS(int df, int* difList, int len){
 
+  //cout  << "Entered makeDS" << endl;
+
   if (len == 0){
-    BA aut = BA();
+    BA* aut = new BA();
+    return aut;
   }
 
   else{
@@ -179,6 +182,7 @@ BA* makeDS(int df, int* difList, int len){
 
 BA* makeDSComparator(vector<string>* alphaList, int df){
 
+  //cout <<  "Entered makeDSComparator" << endl;
   int numAll = alphaList->size();
   int elem;
   int numUnique = 0;

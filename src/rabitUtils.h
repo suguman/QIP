@@ -18,5 +18,5 @@ using namespace std;
 
 BA* reduce(BA* aut);
 
-bool checkEqui(BA* aut1, BA* aut2, string outputfile);
+int checkEqui(BA* aut1, BA* aut2, string outputfile);
 #endif

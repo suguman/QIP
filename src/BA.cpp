@@ -191,6 +191,17 @@ void BA::writeToFile(string filename){
   ofstream outFile;
   outFile.open(filename+".ba");
 
+  if ((this->getStateNum() == 0) ||
+      ((this->getInitial())->size() == 0) ||
+      ((this->getFinal())->size() == 0)){
+
+    string writeString = "[0]\n[0]\n";
+    outFile << writeString;
+    outFile.flush();
+    outFile.close();
+    return;
+  }
+  
   string initStr = "";
   vector <int> * initList = this->getInitial();
   int numInit = initList->size();
@@ -241,6 +252,18 @@ void BA::writeDSToFile(string filename){
   
   ofstream outFile;
   outFile.open(filename+".ba");
+
+  if ((this->getStateNum() == 0) ||
+      ((this->getInitial())->size() == 0) ||
+      ((this->getFinal())->size() == 0)){
+
+    string writeString = "[0]\n[0]\n";
+    outFile << writeString;
+    outFile.flush();
+    outFile.close();
+    return;
+  }
+  
 
   string initStr = "";
   vector <int> * initList = this->getInitial();
