@@ -1002,7 +1002,11 @@ BA* determinize(wBA* aut, int df){
     // To explore state k
     curState = reachState[k];
     val = stateValue[curState];
+    for (int m = 0; m < val.size(); m++){
+      cout << m << " " << val[m] << endl;
+    }
     for (alpha : (*alphaList)){
+      cout << alpha << endl;
       newVector = initVector;
       for (Transition* trans : alphaMap[alpha]){
 	wt = trans->getWt();
@@ -1018,6 +1022,40 @@ BA* determinize(wBA* aut, int df){
 	  cout << m << " " << newVector[m] << endl;
 	}
       }
+      // Find min value of newVector
+      // substract min value from all values in newVector
+      // Need to update initVector, -- some alternative for very large value
+      
+      //Make new transition
+      //From state  curState to state formed from newVector
+      stateString = "";
+      for (int elem : newVector){
+	if (elem < maxGapValue){
+	  stateString += to_string(elem) + sep;
+	}
+	else {
+	  stateString += inf + sep;
+	}
+      }
+      cout << stateString << endl;
+      
+      unordered_map<string,int>::const_iterator got = stateMap.find (stateString);
+
+      if ( got == stateMap.end() ){
+	cout << "not found" << endl;
+  
+	stateMap[stateString] = newState;
+	stateValue[newState] = newVector;
+	reachState.push_back(newState);
+	newState += 1;
+
+	//Create new transition, and add new transition
+	// From curState, to stateMap[stateString], on alpha, with weight wtTrans
+      }
+      else{
+	cout << "found" << endl;
+      }
+      
       //Make new state with alpha
       // use initvector as the initial state, and update on it.
       
