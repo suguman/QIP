@@ -180,7 +180,7 @@ BA* makeDS(int df, int* difList, int len){
   }
 }
 
-BA* makeDSComparator(vector<string>* alphaList, int df){
+BA* makeDSComparator(vector<string>* alphaList, int df, string filename){
 
   //cout <<  "Entered makeDSComparator" << endl;
   int numAll = alphaList->size();
@@ -214,7 +214,7 @@ BA* makeDSComparator(vector<string>* alphaList, int df){
   for (int n = 0; n < numUnique; n++){
     //cout << ar[n] << endl;
   }
-  BA* dsaut = reduce(makeDS(df, ar, numUnique));
+  BA* dsaut = reduce(makeDS(df, ar, numUnique), filename);
   //BA* dsaut = makeDS(df, ar, numUnique);
   //dsaut->printAll();
   return dsaut;

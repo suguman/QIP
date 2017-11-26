@@ -10,7 +10,7 @@ OUTPUTDIR = "OUTPUTS/"
 BENCHMARKDIR = "Benchmark/"
 
 beginState = 5
-endState = 51
+endState = 501
 intervalState = 5
 
 exeFile = "./quip"

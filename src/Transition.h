@@ -25,7 +25,8 @@ public:
   int getSrc();
   int getDest();
   string getAlpha();
-
+  virtual int getWt();
+  
   void setSrc(int s);
   void setDest(int d);
   void setAlpha(string a);

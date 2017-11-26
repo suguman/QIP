@@ -904,3 +904,131 @@ void projectOutWt(BA* aut){
   
 }
 
+
+BA* determinize(wBA* aut, int df){
+  //TODO Code for determinization
+  //Input is a complete discounted-sum automata with all states as accepting states
+  //Assuming a single state
+  
+  int num = aut->getStateNum();
+  vector<int> weight = aut->getWeight();
+  int maxWt = 0;
+
+  int size = weight.size();
+  cout << size << endl;
+  for (int i = 0; i < size; i++){
+    cout << maxWt << endl;
+    if (maxWt < weight[i]){
+      maxWt = weight[i];
+      
+    }
+  }
+
+  int maxGapValue = 2*maxWt+1;
+  int gapValue[maxGapValue-1];
+  string inf = "inf";
+  string sep = "_";
+  
+  for (int i=0; i < maxGapValue; i++){
+    gapValue[i] = i;
+    cout << gapValue[i] << " " << i << endl;
+  }
+
+  unordered_map<string, int> stateMap;
+  unordered_map<int, vector<int>> stateValue;
+  int newState;
+
+  // Creating alphaMap, that maps alphabet to transitions on it
+  
+  unordered_map<string, vector<Transition*> > alphaMap;
+  vector<string>* alphaList = aut->getAlpha();
+  for (string alpha : (*alphaList)){
+    cout << alpha << endl;
+    alphaMap[alpha] = vector<Transition*> {};
+  }
+
+  unordered_map<int, vector<Transition*> >* transMap;
+  transMap = aut->getTrans();
+  for (int j=0; j < num; j++){
+    for (Transition* trans : (*transMap)[j]){
+      //trans->toString();
+      string alpha = trans->getAlpha();
+      //cout << alpha << endl;
+      alphaMap[alpha].push_back(trans);
+      //cout << alpha << " " << alphaMap[alpha].size() << endl;
+    } 
+  }
+
+  // Inserting initial state in stateMap
+  
+  vector<int>* initList = aut->getInitial();
+  // Assuming single state in aut
+  int initState = (*initList)[0];
+  string stateString = "";
+  vector<int> startValue = vector <int> {};
+  vector<int> reachState = {};
+  
+		       
+  for (int i=0; i < num; i++){
+    if (i == initState){
+      stateString += to_string(initState) + sep;
+      startValue.push_back(initState);
+    }
+    else{
+      stateString +=  inf + sep;
+      startValue.push_back(maxGapValue);
+    }
+  }
+  newState = 0;
+  stateMap[stateString] = newState;
+  stateValue[newState] = startValue;
+  reachState.push_back(newState);
+  newState += 1;
+
+  vector <int> val;
+  vector <int> initVector = {};
+  vector <int> newVector;
+  for (int i = 0; i < num; i++){
+    initVector.push_back(maxGapValue);
+    //cout << initVector[i] << endl;
+  }
+  
+  int wt;
+  int src;
+  int dest;
+  int gapVal;
+  int curState;
+  for(int k=0; k < reachState.size(); k++){
+    // To explore state k
+    curState = reachState[k];
+    val = stateValue[curState];
+    for (alpha : (*alphaList)){
+      newVector = initVector;
+      for (Transition* trans : alphaMap[alpha]){
+	wt = trans->getWt();
+	//cout << wt << endl;
+	trans->toString();
+	src = trans->getSrc();
+	dest = trans->getDest();
+	gapVal = val[src];
+	if ((gapVal + wt) < newVector[dest]){
+	  newVector[dest] = gapVal + wt;
+	}
+	for (int m = 0; m < newVector.size(); m++){
+	  cout << m << " " << newVector[m] << endl;
+	}
+      }
+      //Make new state with alpha
+      // use initvector as the initial state, and update on it.
+      
+      // Introduce necessary transitions
+      // Introduce necessary statetes
+      
+    }
+    
+    
+  }
+  
+  BA* detaut = new BA();
+  return detaut;
+}

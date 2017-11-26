@@ -19,12 +19,12 @@ string RABITPATH = "../../Tools/RABIT/";
 
 
 //BA* reduce(string filename){
-BA* reduce(BA* aut){
-  aut->writeDSToFile("DS");
-  string reduceCommand = "java -Xss1G -Xms1G -jar " + RABITPATH + "Reduce.jar DS.ba 30";
+BA* reduce(BA* aut, string filename){
+  aut->writeDSToFile("DS_"+filename);
+  string reduceCommand = "java -Xss1G -Xms1G -jar " + RABITPATH + "Reduce.jar DS_"+filename+".ba 30";
   system(reduceCommand.c_str());
-  BA* reducedBA = readBA("reduced_30_DS.ba");
-  string removeFile = "rm DS.ba reduced_30_DS.ba";
+  BA* reducedBA = readBA("reduced_30_DS_"+filename+".ba");
+  string removeFile = "rm DS_"+filename+".ba reduced_30_DS_"+filename+".ba";
   system(removeFile.c_str());
   return reducedBA;
 }

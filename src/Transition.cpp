@@ -65,3 +65,6 @@ void Transition::toString(){
   //cout << endl;
 }
 
+int Transition::getWt(){
+  return 0;
+}
