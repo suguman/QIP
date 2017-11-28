@@ -23,6 +23,9 @@ wBA::wBA(int num, int numInit, int numFinal, int numAlpha, int* pInit, int *pFin
 wBA::wBA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, unordered_map<int, vector<Transition*> >* transMap):
   BA(num, initList, finalList, alphaList, transMap){}
 
+wBA::wBA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, vector<Transition*>* transList):
+  BA(num, initList, finalList, alphaList, transList){}
+
 wBA::~wBA(){
   //TODO
 }

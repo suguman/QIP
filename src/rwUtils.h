@@ -27,6 +27,8 @@ BA* intersectSelAlpha(BA* aut, BA* comp);
 
 void projectOutWt(BA* aut);
 
-BA* determinize(wBA* aut, int df);
+wBA* determinize(wBA* aut, int df);
+
+wBA* detProdDifference(wBA* aut1, wBA* aut2);
 
 #endif

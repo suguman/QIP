@@ -25,6 +25,8 @@ public:
   wBA(int num, int numInit, int numFinal, int numAlpha, int* pInit, int *pFinal, string pAlpha[], vector<Transition*>* transList);
   
   wBA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, unordered_map<int, vector<Transition*> >* transMap);
+
+  wBA(int num, vector<int>* initList, vector<int>* finalList, vector<string>* alphaList, vector<Transition*>* transList);
   
   virtual ~wBA();
   

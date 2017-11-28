@@ -55,5 +55,3 @@ int checkEqui(BA* aut1, BA* aut2, string outputfile){
   return 2;
 }
 
-
-

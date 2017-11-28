@@ -905,7 +905,7 @@ void projectOutWt(BA* aut){
 }
 
 
-BA* determinize(wBA* aut, int df){
+wBA* determinize(wBA* aut, int df){
   //TODO Code for determinization
   //Input is a complete discounted-sum automata with all states as accepting states
   //Assuming a single state
@@ -915,9 +915,9 @@ BA* determinize(wBA* aut, int df){
   int maxWt = 0;
 
   int size = weight.size();
-  cout << size << endl;
+  //cout << size << endl;
   for (int i = 0; i < size; i++){
-    cout << maxWt << endl;
+    //cout << maxWt << endl;
     if (maxWt < weight[i]){
       maxWt = weight[i];
       
@@ -931,7 +931,7 @@ BA* determinize(wBA* aut, int df){
   
   for (int i=0; i < maxGapValue; i++){
     gapValue[i] = i;
-    cout << gapValue[i] << " " << i << endl;
+    //cout << gapValue[i] << " " << i << endl;
   }
 
   unordered_map<string, int> stateMap;
@@ -943,7 +943,7 @@ BA* determinize(wBA* aut, int df){
   unordered_map<string, vector<Transition*> > alphaMap;
   vector<string>* alphaList = aut->getAlpha();
   for (string alpha : (*alphaList)){
-    cout << alpha << endl;
+    //cout << alpha << endl;
     alphaMap[alpha] = vector<Transition*> {};
   }
 
@@ -967,7 +967,7 @@ BA* determinize(wBA* aut, int df){
   string stateString = "";
   vector<int> startValue = vector <int> {};
   vector<int> reachState = {};
-  
+
 		       
   for (int i=0; i < num; i++){
     if (i == initState){
@@ -979,57 +979,103 @@ BA* determinize(wBA* aut, int df){
       startValue.push_back(maxGapValue);
     }
   }
+
+  vector<int>* initial = new vector<int>{};
   newState = 0;
   stateMap[stateString] = newState;
   stateValue[newState] = startValue;
+  initial->push_back(newState);
   reachState.push_back(newState);
+  
   newState += 1;
 
   vector <int> val;
   vector <int> initVector = {};
   vector <int> newVector;
+  vector <int> finalVector = {};
   for (int i = 0; i < num; i++){
-    initVector.push_back(maxGapValue);
+    //initVector.push_back(maxGapValue);
+    initVector.push_back(30000);
     //cout << initVector[i] << endl;
   }
-  
+
+  vector<Transition*>* transList = new vector<Transition*> {};
   int wt;
   int src;
   int dest;
   int gapVal;
   int curState;
+  int wtTrans;
   for(int k=0; k < reachState.size(); k++){
     // To explore state k
+    //cout << "Reach state size " << reachState.size() << endl; 
     curState = reachState[k];
     val = stateValue[curState];
+    /*
     for (int m = 0; m < val.size(); m++){
       cout << m << " " << val[m] << endl;
     }
+    */
     for (alpha : (*alphaList)){
-      cout << alpha << endl;
+      //cout << alpha << endl;
       newVector = initVector;
       for (Transition* trans : alphaMap[alpha]){
 	wt = trans->getWt();
 	//cout << wt << endl;
-	trans->toString();
+	//trans->toString();
 	src = trans->getSrc();
 	dest = trans->getDest();
 	gapVal = val[src];
 	if ((gapVal + wt) < newVector[dest]){
 	  newVector[dest] = gapVal + wt;
 	}
+	/*
 	for (int m = 0; m < newVector.size(); m++){
 	  cout << m << " " << newVector[m] << endl;
 	}
+	*/
       }
-      // Find min value of newVector
-      // substract min value from all values in newVector
-      // Need to update initVector, -- some alternative for very large value
+      
+      // Find min value of newVector, this is also weight of the transition, wtTrans
+      wtTrans = INT_MAX;
+      for (int i = 0; i < newVector.size(); i++){
+	//cout << wtTrans << " " << newVector[i] << endl;
+	if (wtTrans > newVector[i]){
+	  wtTrans = newVector[i]; 
+	}
+      }
+      
+      // substract min value from all values in newVector, and multiply with df
+      finalVector = vector <int> {};
+      for (int i = 0; i < newVector.size(); i++){
+	long int temp = (newVector[i] - wtTrans)*df;
+	//cout << temp << endl;
+	if (temp >= maxGapValue){
+	  finalVector.push_back(maxGapValue);
+	}
+	else{
+	  finalVector.push_back(temp);
+	}
+      }
+
+      /*
+      cout << "New  Vector" << endl;
+      for (int i=0; i < newVector.size(); i++){
+	cout << newVector[i] << endl;
+      }
+      */
+      /*
+      cout << "Weight of transition " << wtTrans << endl;
+      cout << "Final Vector" << endl;
+      for (int i=0; i < finalVector.size(); i++){
+	cout << finalVector[i] << endl;
+      }
+      */
       
       //Make new transition
-      //From state  curState to state formed from newVector
+      //From state  curState to state formed from finalVector on alpha and wtTrans
       stateString = "";
-      for (int elem : newVector){
+      for (int elem : finalVector){
 	if (elem < maxGapValue){
 	  stateString += to_string(elem) + sep;
 	}
@@ -1037,15 +1083,15 @@ BA* determinize(wBA* aut, int df){
 	  stateString += inf + sep;
 	}
       }
-      cout << stateString << endl;
+      //cout << stateString << endl;
       
       unordered_map<string,int>::const_iterator got = stateMap.find (stateString);
 
       if ( got == stateMap.end() ){
-	cout << "not found" << endl;
+	//cout << "not found" << endl;
   
 	stateMap[stateString] = newState;
-	stateValue[newState] = newVector;
+	stateValue[newState] = finalVector;
 	reachState.push_back(newState);
 	newState += 1;
 
@@ -1053,11 +1099,12 @@ BA* determinize(wBA* aut, int df){
 	// From curState, to stateMap[stateString], on alpha, with weight wtTrans
       }
       else{
-	cout << "found" << endl;
+	//cout << "found" << endl;
       }
       
-      //Make new state with alpha
-      // use initvector as the initial state, and update on it.
+      Transition* newtrans = new wTransition(curState, stateMap[stateString], alpha, wtTrans);
+      //newtrans->toString();
+      transList->push_back(newtrans);
       
       // Introduce necessary transitions
       // Introduce necessary statetes
@@ -1066,7 +1113,156 @@ BA* determinize(wBA* aut, int df){
     
     
   }
+  /*
+  cout << "Transitions" << endl;
+  for (Transition* mytrans : *transList){
+    mytrans->toString();
+  }
+  */
+  //Make all states
+  vector<int>* stateList = new vector<int> {};
+  for (int elem: reachState){
+    stateList->push_back(elem);
+  }
   
-  BA* detaut = new BA();
+  wBA* detaut = new wBA(newState, initial, stateList, alphaList, transList);
   return detaut;
+}
+
+
+wBA* detProdDifference(wBA* aut1, wBA* aut2){
+
+  int aut1State = aut1->getStateNum();
+  int aut2State = aut2->getStateNum();
+  int numprodstate = aut1->getStateNum() * aut2->getStateNum();
+  string ss = "";
+  string sep = "_";
+
+  unordered_map<string, int> stateMap;
+  for (int i=0; i < aut1State; i++){
+    for (int j=0; j< aut2State; j++){
+      ss = to_string(i);
+      ss += sep;
+      ss += to_string(j);
+      stateMap[ss] = -1;
+      ss = "";
+    }
+  }
+
+  int numState = 0; 
+  int numInit = 0;
+
+  vector<int>* init1 = aut1->getInitial();
+  vector<int>* init2 = aut2->getInitial();
+  int aut1InitLen = init1->size();
+  int aut2InitLen = init2->size();
+  
+  vector<string> reachState = {};
+
+  //aut1->printAlpha();
+  //aut2->printAlpha();
+  
+  for (int it1 = 0; it1 < aut1InitLen; it1++){
+    for (int it2 = 0; it2 < aut2InitLen ; it2++){
+      ss = to_string((*init1)[it1]);
+      ss += sep;
+      ss += to_string((*init2)[it2]);
+
+      //cout << ss << endl;
+      stateMap[ss] = numState;
+      reachState.push_back(ss);
+      ss = "";
+      numState += 1;
+      numInit += 1;
+      
+    }
+  }
+
+  //unordered_map<int, vector<Transition*>>* prodTrans = new unordered_map<int, vector<Transition*>> {};
+  unordered_map<int, vector<Transition*>>*  aut1Trans = aut1->getTrans();
+  unordered_map<int, vector<Transition*>>*  aut2Trans = aut2->getTrans();
+  vector < Transition*> * prodTransList = new vector < Transition*> {};
+  int aut1NumTrans = aut1Trans->size();
+  int aut2NumTrans = aut2Trans->size();
+
+  string stateStr;
+  string curStr;
+  string str1;
+  string str2;
+  int s1;
+  int s2;
+  int p;
+  int wt1;
+  int wt2;
+  Transition* transprod;
+  string dest1;
+  string dest2;
+  int d1;
+  int d2;
+  string alpha1;
+  string alpha2;
+  string newStateStr;
+  
+  for (int k = 0; k < reachState.size(); k++){
+    stateStr = reachState[k];
+    curStr = stateStr;
+    //(*prodTrans)[stateMap[stateStr]] =  vector<Transition*> {};
+    //cout << stateStr << endl;
+    p = stateStr.find(sep);
+    str1 = stateStr.substr(0, p);
+    str2 = stateStr.erase(0, p+1);
+    s1 = stoi(str1);
+    s2 = stoi(str2);
+
+    //cout << s1 << " " << s2 << endl;
+   
+
+    for (Transition* trans1 : (*aut1Trans)[s1]){
+      for (Transition* trans2 : (*aut2Trans)[s2]){
+	//trans1->toString();
+	//trans2->toString();
+	alpha1 = trans1->getAlpha();
+	alpha2 = trans2->getAlpha();
+	//cout << alpha1 << " " << alpha2 << endl;
+	if (alpha1 == alpha2){
+	  //cout << "Alphabet are the same" << endl;
+	  wt1 = trans1->getWt();
+	  wt2 = trans2->getWt();
+	  //cout << wt1 << " " << wt2 << endl;
+	  
+	  d1 = trans1->getDest();
+	  d2 = trans2->getDest();
+	  newStateStr = to_string(d1) + sep + to_string(d2);
+	  //cout << d1 << " " << d2 << " " << newStateStr << endl;
+
+	  //cout << newStateStr << " " << stateMap[newStateStr] << endl;
+	  if (stateMap[newStateStr] == -1){
+	    stateMap[newStateStr] = numState;
+	    //cout << stateMap[newStateStr] << " " << newStateStr << endl;
+	    reachState.push_back(newStateStr);
+	    numState += 1;
+	  }
+	  //cout << stateStr << " " << curStr << " " << stateMap[stateStr] << endl;
+	  transprod = new wTransition(stateMap[curStr], stateMap[newStateStr], alpha1, wt1-wt2);
+	  //cout << "New transition is " << endl;
+	  //transprod->toString();
+	  prodTransList->push_back(transprod);
+	  //cout << prodTransList->size() << endl;
+	}
+      }
+    }
+  }
+
+  // Making initial states
+  // Both inputs have a single initial state, and the initial state is marked to 0
+  vector<int>* initial = new vector<int> {0};
+
+  //Final states are all states
+  vector<int>* stateList = new vector<int> {};
+  for (int i =0 ; i < numState; i++){
+    stateList->push_back(i);
+  }
+  
+  wBA* difprod = new wBA(numState, initial, stateList, aut1->getAlpha(), prodTransList);
+  return difprod;
 }

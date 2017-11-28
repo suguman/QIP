@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include <algorithm>
+#include <climits>
 #include <fstream>
 #include <iostream>
 #include <math.h>
