@@ -33,7 +33,8 @@ class BA{
   vector<string>* getAlpha();
   //unordered_map<int, vector< Transition> >* getTrans();
   unordered_map<int, vector< Transition*> >* getTrans();
-  
+  int getTransNum();
+
   void printInitial();
   void printFinal();
   void printAlpha();

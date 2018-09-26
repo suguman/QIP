@@ -21,7 +21,7 @@ string RABITPATH = "../../Tools/RABIT/";
 //BA* reduce(string filename){
 BA* reduce(BA* aut, string filename){
   aut->writeDSToFile("DS_"+filename);
-  string reduceCommand = "java -Xss1G -Xms1G -jar " + RABITPATH + "Reduce.jar DS_"+filename+".ba 30";
+  string reduceCommand = "java -Xss1G -Xms1G -Xmx8G -jar " + RABITPATH + "Reduce.jar DS_"+filename+".ba 30";
   system(reduceCommand.c_str());
   BA* reducedBA = readBA("reduced_30_DS_"+filename+".ba");
   string removeFile = "rm DS_"+filename+".ba reduced_30_DS_"+filename+".ba";
@@ -33,7 +33,7 @@ int checkEqui(BA* aut1, BA* aut2, string outputfile){
   aut1->writeToFile(outputfile+"_0");
   aut2->writeToFile(outputfile+"_1");
   
-  string equi1command = "java -jar " + RABITPATH + "RABIT.jar " +  outputfile+"_0.ba " + outputfile+"_1.ba  > " + outputfile+"_3.txt ";
+  string equi1command = "java -Xss1G -Xms1G -Xmx8G  -jar " + RABITPATH + "RABIT.jar " +  outputfile+"_0.ba " + outputfile+"_1.ba -fast  > " + outputfile+"_3.txt";
   system(equi1command.c_str());
 
   ifstream inFile;
@@ -43,7 +43,7 @@ int checkEqui(BA* aut1, BA* aut2, string outputfile){
  
   string removeFileCommand = "rm " + outputfile+"_0.ba " + outputfile+"_1.ba " + outputfile+"_3.txt";
 
-  system(removeFileCommand.c_str());
+  //system(removeFileCommand.c_str());
   
   if (x[0] == 'N'){  
     return 0;

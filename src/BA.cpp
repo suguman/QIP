@@ -112,6 +112,17 @@ unordered_map<int, vector<Transition*> >* BA::getTrans(){
   return &(this->transFunc);
 }
 
+int BA::getTransNum(){
+  unordered_map<int, vector<Transition*> > tFunction = *(this->getTrans());
+  //cout << &tFunction << endl;                                                                                                                      
+  int num = this->getStateNum();
+  int numTrans = 0;
+  for (int i=0; i< num; i++){
+   numTrans += tFunction[i].size();
+  }
+  return numTrans;
+}
+
 void BA::printFinal(){
   vector<int> finalList = *(this->getFinal());
   int len = finalList.size();

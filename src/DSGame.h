@@ -16,7 +16,7 @@
 
 using namespace std;
 
-int createGame(int df, wBA* aut, string filename);
+string createGame(int df, wBA* aut, string filename);
 
 
 

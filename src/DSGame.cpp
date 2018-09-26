@@ -9,31 +9,72 @@
 
 #include "BA.h"
 #include "common.h"
+#include "memory.h"
 #include "rwUtils.h"
+#include "timers.h"
 #include "Transition.h"
 #include "wBA.h"
 #include "wTransition.h"
+
+#include <chrono>
 
 using namespace std;
 
 string GLPKPath = "../../Tools/glpk-4.63/";
 
-int readOutFile(string filename){
+float readOutFile(string filename){
   //TODO read output file
+
+  ifstream inFile;
+  string x;
+  
+  inFile.open(filename);
+  if (!inFile){
+    cerr << "Unable to open file" << endl;
+    exit(1);
+  }
+
+  while (inFile >> x){
+    //cout << x << endl;
+    
+    if (x.substr(0,6) == "Status"){
+      //cout << x << endl;
+      inFile >> x;
+      //cout << x << endl;
+      if (x == "OPTIMAL"){
+	//Objective line
+	inFile >> x;
+	//obj line
+	inFile >> x;
+	//= line
+	inFile >> x;
+	//val line
+	inFile >> x;
+	return stof(x);
+      }
+      else {
+	//Non-negative value
+	return 0;
+      }
+    }
+    
+  }
+
+  return 0;
 }
 
-int runGLPK(string filename){
-  string cmd = "glpsol --cpxlp " + GLPKPath + filename + ".lp -o "+filename+".out";
+float runGLPK(string filename){
+  string cmd = GLPKPath + "/examples/./glpsol --cpxlp " + GLPKPath + filename + ".lp -o "+filename+".out";
   system(cmd.c_str());
-  //int minWt = getMinWeight(filename+".out");
-  int minWt = 0;
+  float minWt = readOutFile(filename+".out");
+  //int minWt = 0;
   string rmfiles = "rm "+ GLPKPath + filename + ".lp  "+filename+".out";
   system(rmfiles.c_str());
   return minWt;
 }
 
 
-int createGame(int df, wBA* aut, string filename){
+string createGame(int df, wBA* aut, string filename){
 
   if ((aut->getStateNum() == 0) ||
       ((aut->getInitial())->size() == 0) ||
@@ -42,25 +83,38 @@ int createGame(int df, wBA* aut, string filename){
     
     //outFile.flush();
     //outFile.close();
-    return -1;
+    return 0;
   }
    
   int numState = aut->getStateNum();
-  //cout << numState << endl;
+  cout << numState << endl;
 
   string ss;
   string sep = "_";
+
+  cout << "Before initialization " << cpuTimeTotal() << endl;
+
+  //int countMem = 1;
   
+  //cout << "Mem at initial " << getPhysicalMem() << endl;
+  //cout << "Time at init " << cpuTimeTotal() << endl;
   unordered_map <string, int> wtMap;
   for (int i=0; i < numState; i++){
     for (int j=0; j < numState; j++){
       ss = to_string(i) + sep + to_string(j);
       wtMap[ss] = INT_MAX;
+      //countMem += 1;
+      //if (countMem % 1000000 == 0){
+	//cout << "Mem at initial " << getPhysicalMem() << endl;
+	//cout << "Time at init " << cpuTimeTotal() << endl;
+	//countMem = 1;
+      //}
       //cout << ss << " " << wtMap[ss] << endl;
     }
   }
 
-  
+  cout << "Initialize required constraints " << cpuTimeTotal() << endl;
+
   int dest;
   int wt;
   int temp;
@@ -76,8 +130,9 @@ int createGame(int df, wBA* aut, string filename){
       }
     }
   }
-
   
+  //double endSetLP = cpuTotalTime();
+  cout << "Logged the required constraints " << cpuTimeTotal() << endl;
   /*
     Write file for game
   */
@@ -101,6 +156,7 @@ int createGame(int df, wBA* aut, string filename){
   outFile << objective;
   outFile.flush();
     
+  cout << "Begin writing constraints " << cpuTimeTotal() << endl;
   string constraint = "Subject to" + newline;
   int counter = 1;
   for (int i=0; i < numState; i++){
@@ -124,11 +180,15 @@ int createGame(int df, wBA* aut, string filename){
 	  */
 	}
       }
-      if (counter%2 == 0){
+      if (counter%10000 == 0){
 	//TODO Wrtie constraint to file
 	//cout << constraint;
+	double beginFlush = cpuTimeTotal();
 	outFile << constraint;
+	//double beginFlush = cpuTimeTotal();
 	outFile.flush();
+	double endFlush = cpuTimeTotal();
+	cout << "Flush times " << beginFlush << " " << endFlush << " " << endFlush-beginFlush << endl;
 	counter = 1;
 	constraint = "";
       }
@@ -136,8 +196,11 @@ int createGame(int df, wBA* aut, string filename){
   }
   //TODO Wrtie constraint to file
   //cout << constraint;
+  double beginFlush = cpuTimeTotal();
   outFile << constraint;
   outFile.flush();
+  double endFlush = cpuTimeTotal();
+  cout << "Flush times " << beginFlush << " " <<  endFlush << " " << endFlush - beginFlush << endl;
   
   //TODO Wrtie constraint to file
   string endline = "End\n";
@@ -146,10 +209,15 @@ int createGame(int df, wBA* aut, string filename){
   outFile.flush();
 
   outFile.close();
-
-  int val  = runGLPK(filename);
-  cout << val << endl;
-  return val;
+  cout << "End writing constraints " << cpuTimeTotal() << endl;
+  //double beginLP = cpuTimeTotal();
+  auto beginLP = chrono::high_resolution_clock::now();
+  float val  = runGLPK(filename);
+  //double endLP = cpuTimeTotal();
+  auto endLP = chrono::high_resolution_clock::now();
+  //cout << val << endl;
+  double t = (chrono::duration_cast<chrono::milliseconds>(endLP - beginLP).count())/1000.0;
+  return to_string(val)+"_" + to_string(t);
 }
 
 
